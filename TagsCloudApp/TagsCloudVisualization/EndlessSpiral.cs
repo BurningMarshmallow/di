@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
@@ -84,11 +85,15 @@ namespace TagsCloudVisualization
         public void EndlessAndCircleSpiralsShouldGenerateSamePoints()
         {
             var fixture = new Fixture();
-            var anyValue = fixture.Create<int>();
-            var point = new Point(anyValue, anyValue);
 
-            var endlessSpiral = new EndlessSpiral(point);
-            var circleSpiral = new CircleSpiral(point);
+            var x = new Generator<int>(fixture).First();
+            var y = new Generator<int>(fixture).First();
+            fixture.Customize<Point>(c => c
+                .FromFactory(() => new Point(x, y)));
+            var anyCenterPoint = fixture.Create<Point>();
+
+            var endlessSpiral = new EndlessSpiral(anyCenterPoint);
+            var circleSpiral = new CircleSpiral(anyCenterPoint);
 
             for (var i = 0; i < 100; i++)
             {
