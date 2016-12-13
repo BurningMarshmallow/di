@@ -131,7 +131,7 @@ namespace TagsCloudVisualization.UnitTests
         {
             if (TestContext.CurrentContext.Result.Outcome.Status != TestStatus.Failed) return;
 
-            var visualizator = new Visualizer();
+            var visualizator = new BmpVisualizer();
             var dir = TestContext.CurrentContext.TestDirectory;
             var testName = TestContext.CurrentContext.Test.Name;
             var path = dir + testName + ".bmp";

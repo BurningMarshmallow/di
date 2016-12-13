@@ -10,6 +10,7 @@ namespace TagsCloudVisualization
         private readonly List<Rectangle> rectangles;
         public Point Center { get; }
         private readonly ISpiral spiral;
+
         public Layouter(Point center, ISpiral spiral)
         {
             rectangles = new List<Rectangle>();
