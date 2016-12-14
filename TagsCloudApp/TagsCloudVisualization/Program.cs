@@ -22,7 +22,7 @@ namespace TagsCloudVisualization
             }
 
             var container = new WindsorContainer();
-            var statistics = GenerateFrequencyStatisticsFromTextFile("w&p.txt");
+            var statistics = GenerateFrequencyStatisticsFromTextFile(options.TextInputFile);
 
             RegisterComponentsForVisualizer(container, options);
             RegisterComponentsForLayouter(container);

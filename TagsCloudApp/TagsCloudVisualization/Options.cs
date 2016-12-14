@@ -9,6 +9,10 @@ namespace TagsCloudVisualization
         HelpText = "ARGB channels of tag color")]
         public string[] RectangleColor { get; set; }
 
+        [Option('t', "text_input_file", DefaultValue = "w&p.txt",
+            HelpText = "Name of text file containing words")]
+        public string TextInputFile { get; set; }
+
         [OptionArray('b', "background_color", DefaultValue = new[] { "255", "0", "0", "0" },
             HelpText = "ARGB channels of background color")]
         public string[] BackgroundColor { get; set; }
