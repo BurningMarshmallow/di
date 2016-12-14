@@ -38,7 +38,7 @@ namespace TagsCloudVisualization
             var mostPopularWords = statistics
                 .OrderByDescending(entry => entry.Value)
                 .ThenBy(entry => entry.Key)
-                .Take(100)
+                .Take(200)
                 .ToArray();
 
 

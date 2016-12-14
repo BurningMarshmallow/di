@@ -135,7 +135,7 @@ namespace TagsCloudVisualization.UnitTests
             var dir = TestContext.CurrentContext.TestDirectory;
             var testName = TestContext.CurrentContext.Test.Name;
             var path = dir + testName + ".bmp";
-            visualizator.Visualize(cloudLayouter.Rectangles, path);
+            visualizator.VisualizeRectangles(cloudLayouter.Rectangles, path);
             Console.WriteLine("Tag cloud visualization saved to file " + path);
         }
     }

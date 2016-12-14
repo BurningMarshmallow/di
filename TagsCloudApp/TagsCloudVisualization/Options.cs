@@ -5,8 +5,8 @@ namespace TagsCloudVisualization
 {
     public class Options
     {
-        [OptionArray('r', "rectangle_color", DefaultValue = new[] { "255", "255", "0", "0" },
-        HelpText = "ARGB channels of rectangle color")]
+        [OptionArray('t', "tag_color", DefaultValue = new[] { "255", "255", "165", "0" },
+        HelpText = "ARGB channels of tag color")]
         public string[] RectangleColor { get; set; }
 
         [OptionArray('b', "background_color", DefaultValue = new[] { "255", "0", "0", "0" },
