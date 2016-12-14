@@ -100,6 +100,7 @@
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.0.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -115,6 +116,7 @@
     <Compile Include="IVisualizer.cs" />
     <Compile Include="LayouterWithEndlessSpiral.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="Tag.cs" />
     <Compile Include="UnitTests\LayouterBenchmark.cs" />
     <Compile Include="UnitTests\LayouterWithEndlessSpiralTests.cs" />
     <Compile Include="UnitTests\LayouterTests.cs" />

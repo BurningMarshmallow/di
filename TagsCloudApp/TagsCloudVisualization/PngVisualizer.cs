@@ -27,21 +27,22 @@ namespace TagsCloudVisualization
             this.imageHeight = imageHeight;
         }
 
-        public void Visualize(Rectangle[] rectangles, string filename)
+        public void Visualize(string filename, IEnumerable<Tag> tags)
         {
             var bitmap = new Bitmap(imageWidth, imageHeight);
             var graphics = Graphics.FromImage(bitmap);
-            DrawRectangles(rectangles, graphics);
+            graphics.Clear(backgroundColor);
+            DrawTags(tags, graphics);
             bitmap.Save(filename, ImageFormat.Png);
         }
 
-        private void DrawRectangles(IEnumerable<Rectangle> rectangles, Graphics graphics)
+        public void DrawTags(IEnumerable<Tag> tags, Graphics graphics)
         {
-            graphics.Clear(backgroundColor);
-            foreach (var rectangle in rectangles)
-                graphics.DrawRectangle(rectanglePen, rectangle);
-            graphics.Save();
+            var brush = new SolidBrush(rectanglePen.Color);
+            foreach (var tag in tags)
+            {
+                graphics.DrawString(tag.Text, tag.TagFont, brush, tag.Place.Location);
+            }
         }
-
     }
 }

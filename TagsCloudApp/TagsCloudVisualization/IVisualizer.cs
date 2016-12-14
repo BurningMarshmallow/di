@@ -1,9 +1,9 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
 
 namespace TagsCloudVisualization
 {
     public interface IVisualizer
     {
-        void Visualize(Rectangle[] rectangles, string filename);
+        void Visualize(string filename, IEnumerable<Tag> tags);
     }
 }

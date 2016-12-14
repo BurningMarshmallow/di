@@ -5,24 +5,24 @@ using System.Drawing.Imaging;
 
 namespace TagsCloudVisualization
 {
-    class BmpVisualizer : IVisualizer
+    class BmpVisualizer
     {
         private readonly int imageWidth;
         private readonly int imageHeight;
-        private readonly Pen rectangleColor;
+        private readonly Pen rectanglePen;
         private readonly Color backgroundColor;
 
         public BmpVisualizer()
         {
             backgroundColor = Color.SeaShell;
-            rectangleColor = new Pen(Color.Tomato, 3);
+            rectanglePen = new Pen(Color.Tomato, 3);
             imageWidth = 800;
             imageHeight = 800;
         }
 
-        public BmpVisualizer(Pen rectangleColor, Color backgroundColor, int imageWidth, int imageHeight)
+        public BmpVisualizer(Color rectangleColor, Color backgroundColor, int imageWidth, int imageHeight)
         {
-            this.rectangleColor = rectangleColor;
+            rectanglePen = new Pen(rectangleColor, 3);
             this.backgroundColor = backgroundColor;
             this.imageWidth = imageWidth;
             this.imageHeight = imageHeight;
@@ -40,7 +40,7 @@ namespace TagsCloudVisualization
         {
             graphics.Clear(backgroundColor);
             foreach (var rectangle in rectangles)
-                graphics.DrawRectangle(rectangleColor, rectangle);
+                graphics.DrawRectangle(rectanglePen, rectangle);
             graphics.Save();
         }
     }

@@ -9,13 +9,13 @@ namespace TagsCloudVisualization
     {
         private readonly List<Rectangle> rectangles;
         public Point Center { get; }
-        private readonly ISpiral spiral;
+        private ISpiral Spiral { get; }
 
         public Layouter(Point center, ISpiral spiral)
         {
             rectangles = new List<Rectangle>();
             Center = center;
-            this.spiral = spiral;
+            Spiral = spiral;
         }
 
         public Rectangle PutNextRectangle(Size rectangleSize)
@@ -44,7 +44,7 @@ namespace TagsCloudVisualization
             var lastPoint = GetRectangleUpperLeftPoint(rectangles[rectangles.Count - 1]);
             var point = lastPoint;
             while (CantBePlaced(point, rectangleSize))
-                point = spiral.GenerateNextPoint();
+                point = Spiral.GenerateNextPoint();
             return point;
         }
 

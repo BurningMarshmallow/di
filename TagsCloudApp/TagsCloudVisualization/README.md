@@ -1,4 +1,4 @@
 Pictures:
 
-![Alt text](Pictures/LittleTest.bmp?raw=true "Little")
-![Alt text](Pictures/BigTest.bmp?raw=true "Big")
+![Alt text](Pictures/War&Peace.png?raw=true "War & Peace")
+![Alt text](Pictures/BigTest.bmp?raw=true "Example of layouting rectangles")
