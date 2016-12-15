@@ -4,11 +4,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CommandLine;
 using TagsCloudVisualization.Layouter;
-using TagsCloudVisualization.Spiral;
 using TagsCloudVisualization.Visualizer;
 
 namespace TagsCloudVisualization
@@ -26,8 +24,8 @@ namespace TagsCloudVisualization
             var container = new WindsorContainer();
             var statistics = GenerateFrequencyStatisticsFromTextFile(options.TextInputFile);
 
-            RegisterComponentsForVisualizer(container, options);
-            RegisterComponentsForLayouter(container);
+            CastleWindsorRecorder.RegisterComponentsForVisualizer(container, options);
+            CastleWindsorRecorder.RegisterComponentsForLayouter(container);
 
             var layouter = container.Resolve<ILayouter>();
             var tags = LayoutTags(statistics, layouter, options);
@@ -55,23 +53,6 @@ namespace TagsCloudVisualization
             }
         }
 
-        private static void RegisterComponentsForVisualizer(IWindsorContainer container, Options options)
-        {
-            var backgroundColor = GetColor(options.BackgroundColor);
-            var tagColor = GetColor(options.TagColor);
-
-            container.Register(
-                Component
-                    .For<BaseVisualizer>()
-                    .ImplementedBy<PngVisualizer>()
-                    .DependsOn(
-                        Dependency.OnValue("tagColor", tagColor),
-                        Dependency.OnValue("backgroundColor", backgroundColor),
-                        Dependency.OnValue("imageHeight", options.ImageHeight),
-                        Dependency.OnValue("imageWidth", options.ImageWidth))
-            );
-        }
-
         public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextFile(string textFile)
         {
             var frequencyDictionary = new Dictionary<string, int>();
@@ -94,31 +75,6 @@ namespace TagsCloudVisualization
             return frequencyDictionary;
         }
 
-
-        private static void RegisterComponentsForLayouter(IWindsorContainer container)
-        {
-            var spiralCenter = new Point(400, 400);
-            container.Register(
-                Component
-                    .For<ISpiral>()
-                    .ImplementedBy<CircleSpiral>().Named("Spiral")
-                    .DependsOn(Dependency.OnValue("spiralCenter", spiralCenter)));
-
-            container.Register(
-                Component
-                    .For<ILayouter>()
-                    .ImplementedBy<LayouterWithGeneratorSpiral>()
-                    .DependsOn(Dependency.OnValue("center", spiralCenter))
-                    .DependsOn(Dependency.OnComponent("spiral", "Spiral")));
-        }
-
-        private static Color GetColor(string[] channels)
-        {
-            if (channels.Length != 4)
-                throw new ArgumentException("Was expecting 4 channels of color: alpha, red, green, blue");
-            var channelsValues = channels.Select(int.Parse).ToArray();
-            return Color.FromArgb(channelsValues[0], channelsValues[1], channelsValues[2], channelsValues[3]);
-        }
 
         public static Font BuildFontFromWeight(int tagWeight, int minTagWeight, int maxTagWeight, Options options)
         {
