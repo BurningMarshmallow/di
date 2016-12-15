@@ -7,9 +7,9 @@ namespace TagsCloudVisualization
     {
         [OptionArray('t', "tag_color", DefaultValue = new[] { "255", "255", "165", "0" },
         HelpText = "ARGB channels of tag color")]
-        public string[] RectangleColor { get; set; }
+        public string[] TagColor { get; set; }
 
-        [Option('t', "text_input_file", DefaultValue = "w&p.txt",
+        [Option('i', "text_input_file", DefaultValue = "w&p.txt",
             HelpText = "Name of text file containing words")]
         public string TextInputFile { get; set; }
 
@@ -23,7 +23,7 @@ namespace TagsCloudVisualization
         [Option('h', "image_height", DefaultValue = 800, HelpText = "Height of resulting image")]
         public int ImageHeight { get; set; }
 
-        [Option('i', "image_file", DefaultValue = "Cloud.png", HelpText = "Name of resulting image file")]
+        [Option('o', "image_file", DefaultValue = "Cloud.png", HelpText = "Name of resulting image file")]
         public string ImageOutputFile { get; set; }
 
         [Option("min_font_size", DefaultValue = 10, HelpText = "Minimal font size of word")]

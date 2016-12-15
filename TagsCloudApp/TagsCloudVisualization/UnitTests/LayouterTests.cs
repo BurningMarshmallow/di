@@ -3,6 +3,9 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
+using TagsCloudVisualization.Layouter;
+using TagsCloudVisualization.Spiral;
+using TagsCloudVisualization.Visualizer;
 
 namespace TagsCloudVisualization.UnitTests
 {
@@ -10,13 +13,13 @@ namespace TagsCloudVisualization.UnitTests
     class LayouterTests
     {
         private readonly Point center = new Point(400, 400);
-        private Layouter cloudLayouter;
+        private LayouterWithGeneratorSpiral cloudLayouter;
 
         [SetUp]
         public void SetUp()
         {
             var spiral = new CircleSpiral(center);
-            cloudLayouter = new Layouter(center, spiral);
+            cloudLayouter = new LayouterWithGeneratorSpiral(center, spiral);
         }
 
         [Test]
@@ -55,7 +58,7 @@ namespace TagsCloudVisualization.UnitTests
             var first = cloudLayouter.PutNextRectangle(rectangleSize);
             var second= cloudLayouter.PutNextRectangle(rectangleSize);
 
-            Assert.False(first.IntersectsWith(second));
+            Assert.True(first.IntersectsWith(second));
         }
 
         [TestCase(240)]

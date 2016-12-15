@@ -7,7 +7,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.Spiral
 {
     public class EndlessSpiral : ISpiral, IEnumerable<Point>
     {

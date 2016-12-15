@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 
-
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.Spiral
 {
     public interface ISpiral
     {

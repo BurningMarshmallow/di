@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Drawing;
 
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.Spiral
 {
-    class CrossSpiral : ISpiral
+    class CircleSpiral : ISpiral
     {
         private readonly Point spiralCenter;
         private int currentIteration;
         private const double StartRadius = 0.01;
-        private const double StartAngle = Math.PI/2;
+        private const double StartAngle = 50;
 
-        public CrossSpiral(Point spiralCenter)
+        public CircleSpiral(Point spiralCenter)
         {
             this.spiralCenter = spiralCenter;
             currentIteration = 1;

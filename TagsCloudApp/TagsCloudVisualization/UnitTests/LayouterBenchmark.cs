@@ -2,6 +2,8 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Jobs;
 using BenchmarkDotNet.Running;
+using TagsCloudVisualization.Layouter;
+using TagsCloudVisualization.Spiral;
 
 namespace TagsCloudVisualization.UnitTests
 {
@@ -15,13 +17,13 @@ namespace TagsCloudVisualization.UnitTests
         public readonly ISpiral CircleSpiral = new CircleSpiral(Center);
 
         public LayouterWithEndlessSpiral LayouterWithEndlessSpiral { get; set; }
-        public Layouter LayouterWithGeneratorSpiral { get; set; }
+        public LayouterWithGeneratorSpiral LayouterWithGeneratorSpiral { get; set; }
 
         [Setup]
         public void Setup()
         {
             LayouterWithEndlessSpiral = new LayouterWithEndlessSpiral(Center);
-            LayouterWithGeneratorSpiral = new Layouter(Center, CircleSpiral);
+            LayouterWithGeneratorSpiral = new LayouterWithGeneratorSpiral(Center, CircleSpiral);
         }
 
         [Benchmark]

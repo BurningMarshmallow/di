@@ -7,20 +7,23 @@ using System.Text.RegularExpressions;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CommandLine;
+using TagsCloudVisualization.Layouter;
+using TagsCloudVisualization.Spiral;
+using TagsCloudVisualization.Visualizer;
 
 namespace TagsCloudVisualization
 {
-    class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine(3);
             var options = new Options();
             if (!Parser.Default.ParseArguments(args, options))
             {
                 Console.WriteLine("Can't parse these args, check them");
                 return;
             }
-
             var container = new WindsorContainer();
             var statistics = GenerateFrequencyStatisticsFromTextFile(options.TextInputFile);
 
@@ -29,7 +32,7 @@ namespace TagsCloudVisualization
 
             var layouter = container.Resolve<ILayouter>();
             var tags = LayoutTags(statistics, layouter, options);
-            var visualizer = container.Resolve<IVisualizer>();
+            var visualizer = container.Resolve<BaseVisualizer>();
             visualizer.Visualize(options.ImageOutputFile, tags);
         }
 
@@ -56,14 +59,14 @@ namespace TagsCloudVisualization
         private static void RegisterComponentsForVisualizer(IWindsorContainer container, Options options)
         {
             var backgroundColor = GetColor(options.BackgroundColor);
-            var rectangleColor = GetColor(options.RectangleColor);
+            var tagColor = GetColor(options.TagColor);
 
             container.Register(
                 Component
-                    .For<IVisualizer>()
+                    .For<BaseVisualizer>()
                     .ImplementedBy<PngVisualizer>()
                     .DependsOn(
-                        Dependency.OnValue("rectangleColor", rectangleColor),
+                        Dependency.OnValue("tagColor", tagColor),
                         Dependency.OnValue("backgroundColor", backgroundColor),
                         Dependency.OnValue("imageHeight", options.ImageHeight),
                         Dependency.OnValue("imageWidth", options.ImageWidth))
@@ -77,7 +80,7 @@ namespace TagsCloudVisualization
             var text = File.ReadAllLines(textFile);
             var words = text
                 .SelectMany(line => Regex.Split(line, @"\W+"))
-                .Where(word => word.Length > 4)
+                .Where(word => word.Length > 2)
                 .Select(word => word.ToLower())
                 .ToArray();
 
@@ -105,7 +108,7 @@ namespace TagsCloudVisualization
             container.Register(
                 Component
                     .For<ILayouter>()
-                    .ImplementedBy<Layouter>()
+                    .ImplementedBy<LayouterWithGeneratorSpiral>()
                     .DependsOn(Dependency.OnValue("center", spiralCenter))
                     .DependsOn(Dependency.OnComponent("spiral", "Spiral")));
         }

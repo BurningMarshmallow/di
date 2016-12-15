@@ -109,30 +109,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrossSpiral.cs" />
-    <Compile Include="EndlessSpiral.cs" />
-    <Compile Include="ILayouter.cs" />
-    <Compile Include="ISpiral.cs" />
-    <Compile Include="IVisualizer.cs" />
-    <Compile Include="LayouterWithEndlessSpiral.cs" />
+    <Compile Include="Spiral\CrossSpiral.cs" />
+    <Compile Include="Spiral\EndlessSpiral.cs" />
+    <Compile Include="Layouter\ILayouter.cs" />
+    <Compile Include="Spiral\ISpiral.cs" />
+    <Compile Include="Visualizer\BaseVisualizer.cs" />
+    <Compile Include="Visualizer\IVisualizer.cs" />
+    <Compile Include="Layouter\LayouterWithEndlessSpiral.cs" />
     <Compile Include="Options.cs" />
-    <Compile Include="Tag.cs" />
+    <Compile Include="Visualizer\Tag.cs" />
     <Compile Include="UnitTests\LayouterBenchmark.cs" />
     <Compile Include="UnitTests\LayouterWithEndlessSpiralTests.cs" />
     <Compile Include="UnitTests\LayouterTests.cs" />
-    <Compile Include="Layouter.cs" />
+    <Compile Include="Layouter\LayouterWithGeneratorSpiral.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RectangleExtensions.cs" />
-    <Compile Include="CircleSpiral.cs" />
-    <Compile Include="RectangleFactory.cs" />
-    <Compile Include="BmpVisualizer.cs" />
-    <Compile Include="PngVisualizer.cs" />
+    <Compile Include="Layouter\RectangleExtensions.cs" />
+    <Compile Include="Spiral\CircleSpiral.cs" />
+    <Compile Include="Layouter\RectangleFactory.cs" />
+    <Compile Include="Visualizer\BmpVisualizer.cs" />
+    <Compile Include="Visualizer\PngVisualizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

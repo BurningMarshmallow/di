@@ -1,10 +1,9 @@
 ﻿using System.Drawing;
 
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.Layouter
 {
     public interface ILayouter
     {
-        //Point GetNextPoint(Size rectangleSize);
         Rectangle PutNextRectangle(Size rectangleSize);
         Rectangle[] Rectangles { get; }
     }

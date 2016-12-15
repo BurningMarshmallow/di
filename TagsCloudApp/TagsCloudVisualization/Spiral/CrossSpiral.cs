@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Drawing;
-// ReSharper disable InconsistentNaming
 
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.Spiral
 {
-    class CircleSpiral : ISpiral
+    class CrossSpiral : ISpiral
     {
         private readonly Point spiralCenter;
         private int currentIteration;
         private const double StartRadius = 0.01;
-        private const double StartAngle = 50;
+        private const double StartAngle = Math.PI/2;
 
-        public CircleSpiral(Point spiralCenter)
+        public CrossSpiral(Point spiralCenter)
         {
             this.spiralCenter = spiralCenter;
             currentIteration = 1;

@@ -1,28 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 
-
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.Visualizer
 {
-    class BmpVisualizer
+    abstract class BaseVisualizer
     {
         private readonly int imageWidth;
         private readonly int imageHeight;
-        private readonly Pen rectanglePen;
+        private readonly Pen tagPen;
         private readonly Color backgroundColor;
 
-        public BmpVisualizer()
+        protected BaseVisualizer()
         {
-            backgroundColor = Color.SeaShell;
-            rectanglePen = new Pen(Color.Tomato, 3);
+            backgroundColor = Color.Purple;
+            tagPen = new Pen(Color.Orange, 3);
             imageWidth = 800;
             imageHeight = 800;
         }
 
-        public BmpVisualizer(Color rectangleColor, Color backgroundColor, int imageWidth, int imageHeight)
+        protected BaseVisualizer(Color tagColor, Color backgroundColor, int imageWidth, int imageHeight)
         {
-            rectanglePen = new Pen(rectangleColor, 3);
+            tagPen = new Pen(tagColor, 3);
             this.backgroundColor = backgroundColor;
             this.imageWidth = imageWidth;
             this.imageHeight = imageHeight;
@@ -34,31 +32,33 @@ namespace TagsCloudVisualization
             var graphics = Graphics.FromImage(bitmap);
             graphics.Clear(backgroundColor);
             DrawTags(tags, graphics);
-            bitmap.Save(filename, ImageFormat.Png);
+            SaveImage(bitmap, filename);
         }
 
-        public void DrawTags(IEnumerable<Tag> tags, Graphics graphics)
+        public abstract void SaveImage(Image bitmap, string filename);
+
+        private void DrawTags(IEnumerable<Tag> tags, Graphics graphics)
         {
-            var brush = new SolidBrush(rectanglePen.Color);
+            var brush = new SolidBrush(tagPen.Color);
             foreach (var tag in tags)
             {
                 graphics.DrawString(tag.Text, tag.TagFont, brush, tag.Place.Location);
             }
         }
 
-        public void VisualizeRectangles(Rectangle[] rectangles, string filename)
+        public void VisualizeRectangles(Rectangle[] tags, string filename)
         {
             var bitmap = new Bitmap(imageWidth, imageHeight);
             var graphics = Graphics.FromImage(bitmap);
-            DrawRectangles(rectangles, graphics);
-            bitmap.Save(filename, ImageFormat.Bmp);
+            DrawRectangles(tags, graphics);
+            SaveImage(bitmap, filename);
         }
 
-        private void DrawRectangles(IEnumerable<Rectangle> rectangles, Graphics graphics)
+        private void DrawRectangles(IEnumerable<Rectangle> tags, Graphics graphics)
         {
             graphics.Clear(backgroundColor);
-            foreach (var rectangle in rectangles)
-                graphics.DrawRectangle(rectanglePen, rectangle);
+            foreach (var tag in tags)
+                graphics.DrawRectangle(tagPen, tag);
             graphics.Save();
         }
     }
