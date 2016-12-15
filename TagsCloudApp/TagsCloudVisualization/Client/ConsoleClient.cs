@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,16 @@ namespace TagsCloudVisualization.Client
         public void Run(IWindsorContainer container, Options options)
         {
             var layouter = container.Resolve<ILayouter>();
-            var text = File.ReadAllLines(options.TextInputFile);
+            string[] text;
+            try
+            {
+                text = File.ReadAllLines(options.TextInputFile);
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("File was not found");
+                return;
+            }
             var statistics = WordStatistics.GenerateFrequencyStatisticsFromTextFile(text);
             var tags = LayoutTags(statistics, layouter, options);
             var visualizer = container.Resolve<BaseVisualizer>();
