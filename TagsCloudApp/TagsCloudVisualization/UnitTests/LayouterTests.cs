@@ -58,7 +58,7 @@ namespace TagsCloudVisualization.UnitTests
             var first = cloudLayouter.PutNextRectangle(rectangleSize);
             var second= cloudLayouter.PutNextRectangle(rectangleSize);
 
-            Assert.True(first.IntersectsWith(second));
+            Assert.False(first.IntersectsWith(second));
         }
 
         [TestCase(240)]
