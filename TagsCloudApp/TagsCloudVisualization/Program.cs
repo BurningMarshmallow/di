@@ -80,7 +80,7 @@ namespace TagsCloudVisualization
             var text = File.ReadAllLines(textFile);
             var words = text
                 .SelectMany(line => Regex.Split(line, @"\W+"))
-                .Where(word => word.Length > 2)
+                .Where(word => word.Length > 4)
                 .Select(word => word.ToLower())
                 .ToArray();
 
