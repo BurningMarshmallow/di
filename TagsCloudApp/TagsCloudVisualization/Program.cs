@@ -17,7 +17,6 @@ namespace TagsCloudVisualization
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(3);
             var options = new Options();
             if (!Parser.Default.ParseArguments(args, options))
             {

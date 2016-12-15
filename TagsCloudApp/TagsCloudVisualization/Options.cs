@@ -9,7 +9,7 @@ namespace TagsCloudVisualization
         HelpText = "ARGB channels of tag color")]
         public string[] TagColor { get; set; }
 
-        [OptionArray('n', "number_of_words", DefaultValue = 200,
+        [OptionArray('n', "number_of_words", DefaultValue = 100,
         HelpText = "Number of words to layout")]
         public int NumberOfWords { get; set; }
 

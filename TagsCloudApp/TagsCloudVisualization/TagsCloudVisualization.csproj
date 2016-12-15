@@ -114,7 +114,6 @@
     <Compile Include="Layouter\ILayouter.cs" />
     <Compile Include="Spiral\ISpiral.cs" />
     <Compile Include="Visualizer\BaseVisualizer.cs" />
-    <Compile Include="Visualizer\IVisualizer.cs" />
     <Compile Include="Layouter\LayouterWithEndlessSpiral.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Visualizer\Tag.cs" />
