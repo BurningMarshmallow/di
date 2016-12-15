@@ -115,6 +115,7 @@
     <Compile Include="Spiral\EndlessSpiral.cs" />
     <Compile Include="Layouter\ILayouter.cs" />
     <Compile Include="Spiral\ISpiral.cs" />
+    <Compile Include="Statistics\WordStatistics.cs" />
     <Compile Include="Visualizer\BaseVisualizer.cs" />
     <Compile Include="Layouter\LayouterWithEndlessSpiral.cs" />
     <Compile Include="Options.cs" />

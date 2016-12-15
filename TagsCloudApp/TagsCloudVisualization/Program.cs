@@ -77,13 +77,5 @@ namespace TagsCloudVisualization
             var channelsValues = channels.Select(int.Parse).ToArray();
             return Color.FromArgb(channelsValues[0], channelsValues[1], channelsValues[2], channelsValues[3]);
         }
-
-        public static Font BuildFontFromWeight(int tagWeight, int minTagWeight, int maxTagWeight, Options options)
-        {
-            var fontSize = options.MinFontSize +
-                           (tagWeight - minTagWeight)*(options.MaxFontSize - options.MinFontSize)/
-                           (maxTagWeight - minTagWeight);
-            return new Font(options.FontFamily, fontSize);
-        }
     }
 }
