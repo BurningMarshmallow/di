@@ -89,6 +89,7 @@
       <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
@@ -119,6 +120,7 @@
     <Compile Include="Visualizer\BaseVisualizer.cs" />
     <Compile Include="Layouter\LayouterWithEndlessSpiral.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="Visualizer\ImageSettings.cs" />
     <Compile Include="Visualizer\Tag.cs" />
     <Compile Include="UnitTests\LayouterBenchmark.cs" />
     <Compile Include="UnitTests\LayouterWithEndlessSpiralTests.cs" />

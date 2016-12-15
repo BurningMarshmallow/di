@@ -18,6 +18,14 @@ namespace TagsCloudVisualization.Visualizer
             imageHeight = 800;
         }
 
+        protected BaseVisualizer(ImageSettings imageSettings)
+        {
+            tagPen = new Pen(imageSettings.TagColor, 3);
+            backgroundColor = imageSettings.BackgroundColor;
+            imageWidth = imageSettings.ImageWidth;
+            imageHeight = imageSettings.ImageHeight;
+        }
+
         protected BaseVisualizer(Color tagColor, Color backgroundColor, int imageWidth, int imageHeight)
         {
             tagPen = new Pen(tagColor, 3);

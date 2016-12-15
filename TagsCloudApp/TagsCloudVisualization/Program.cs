@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CommandLine;
@@ -22,32 +21,28 @@ namespace TagsCloudVisualization
                 return;
             }
             var container = new WindsorContainer();
+            var imageSettings = SettingsParser.ParseImageSettings();
+            if (imageSettings == null)
+                return;
 
             container.Register(
                 Component
                     .For<IClient>()
                     .ImplementedBy<ConsoleClient>());
-            RegisterComponentsForVisualizer(container, options);
+            RegisterComponentsForVisualizer(container, imageSettings);
             RegisterComponentsForLayouter(container);
 
             var client = container.Resolve<IClient>();
             client.Run(container, options);
         }
 
-        private static void RegisterComponentsForVisualizer(IWindsorContainer container, Options options)
+        private static void RegisterComponentsForVisualizer(IWindsorContainer container, ImageSettings imageSettings)
         {
-            var backgroundColor = GetColor(options.BackgroundColor);
-            var tagColor = GetColor(options.TagColor);
-
             container.Register(
                 Component
                     .For<BaseVisualizer>()
                     .ImplementedBy<PngVisualizer>()
-                    .DependsOn(
-                        Dependency.OnValue("tagColor", tagColor),
-                        Dependency.OnValue("backgroundColor", backgroundColor),
-                        Dependency.OnValue("imageHeight", options.ImageHeight),
-                        Dependency.OnValue("imageWidth", options.ImageWidth))
+                    .DependsOn(Dependency.OnValue("imageSettings", imageSettings))
             );
         }
 
@@ -67,15 +62,6 @@ namespace TagsCloudVisualization
                     .ImplementedBy<LayouterWithGeneratorSpiral>()
                     .DependsOn(Dependency.OnValue("center", spiralCenter))
                     .DependsOn(Dependency.OnComponent("spiral", "Spiral")));
-        }
-
-
-        private static Color GetColor(string[] channels)
-        {
-            if (channels.Length != 4)
-                throw new ArgumentException("Was expecting 4 channels of color: alpha, red, green, blue");
-            var channelsValues = channels.Select(int.Parse).ToArray();
-            return Color.FromArgb(channelsValues[0], channelsValues[1], channelsValues[2], channelsValues[3]);
         }
     }
 }

@@ -14,6 +14,10 @@ namespace TagsCloudVisualization.Visualizer
         {
         }
 
+        public BmpVisualizer(ImageSettings imageSettings) : base(imageSettings)
+        {
+        }
+
         public BmpVisualizer(Color tagColor, Color backgroundColor, int imageWidth, int imageHeight)
             : base(tagColor, backgroundColor, imageWidth, imageHeight)
         {
