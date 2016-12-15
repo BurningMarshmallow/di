@@ -9,5 +9,14 @@ namespace TagsCloudVisualization.Visualizer
         {
             bitmap.Save(filename, ImageFormat.Png);
         }
+
+        public PngVisualizer()
+        {
+        }
+
+        public PngVisualizer(Color tagColor, Color backgroundColor, int imageWidth, int imageHeight)
+            : base(tagColor, backgroundColor, imageWidth, imageHeight)
+        {
+        }
     }
 }

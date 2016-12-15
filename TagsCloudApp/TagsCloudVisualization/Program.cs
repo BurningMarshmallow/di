@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CommandLine;
+using TagsCloudVisualization.Client;
 using TagsCloudVisualization.Layouter;
+using TagsCloudVisualization.Spiral;
 using TagsCloudVisualization.Visualizer;
 
 namespace TagsCloudVisualization
@@ -22,63 +22,67 @@ namespace TagsCloudVisualization
                 return;
             }
             var container = new WindsorContainer();
-            var statistics = GenerateFrequencyStatisticsFromTextFile(options.TextInputFile);
 
-            CastleWindsorRecorder.RegisterComponentsForVisualizer(container, options);
-            CastleWindsorRecorder.RegisterComponentsForLayouter(container);
+            container.Register(
+                Component
+                    .For<IClient>()
+                    .ImplementedBy<ConsoleClient>());
+            RegisterComponentsForVisualizer(container, options);
+            RegisterComponentsForLayouter(container);
 
-            var layouter = container.Resolve<ILayouter>();
-            var tags = LayoutTags(statistics, layouter, options);
-            var visualizer = container.Resolve<BaseVisualizer>();
-            visualizer.Visualize(options.ImageOutputFile, tags);
+            var client = container.Resolve<IClient>();
+            client.Run(container, options);
         }
 
-        private static IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter, Options options)
+        private static void RegisterComponentsForVisualizer(IWindsorContainer container, Options options)
         {
-            var mostPopularWords = statistics
-                .OrderByDescending(entry => entry.Value)
-                .ThenBy(entry => entry.Key)
-                .Take(options.NumberOfWords)
-                .ToArray();
+            var backgroundColor = GetColor(options.BackgroundColor);
+            var tagColor = GetColor(options.TagColor);
 
-
-            var minTagWeight = mostPopularWords.Last().Value;
-            var maxTagWeight = mostPopularWords.First().Value;
-
-            foreach (var pair in mostPopularWords)
-            {
-                var tag = new Tag(pair.Key, BuildFontFromWeight(pair.Value, minTagWeight, maxTagWeight, options));
-                tag.Place = layouter.PutNextRectangle(tag.TagSize);
-                yield return tag;
-            }
+            container.Register(
+                Component
+                    .For<BaseVisualizer>()
+                    .ImplementedBy<PngVisualizer>()
+                    .DependsOn(
+                        Dependency.OnValue("tagColor", tagColor),
+                        Dependency.OnValue("backgroundColor", backgroundColor),
+                        Dependency.OnValue("imageHeight", options.ImageHeight),
+                        Dependency.OnValue("imageWidth", options.ImageWidth))
+            );
         }
 
-        public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextFile(string textFile)
+
+        private static void RegisterComponentsForLayouter(IWindsorContainer container)
         {
-            var frequencyDictionary = new Dictionary<string, int>();
+            var spiralCenter = new Point(400, 400);
+            container.Register(
+                Component
+                    .For<ISpiral>()
+                    .ImplementedBy<CircleSpiral>().Named("Spiral")
+                    .DependsOn(Dependency.OnValue("spiralCenter", spiralCenter)));
 
-            var text = File.ReadAllLines(textFile);
-            var words = text
-                .SelectMany(line => Regex.Split(line, @"\W+"))
-                .Where(word => word.Length > 4)
-                .Select(word => word.ToLower())
-                .ToArray();
-
-            var uniqueWords = words.Distinct();
-
-            foreach (var uniqueWord in uniqueWords)
-            {
-                var wordCount = words.Count(word => word == uniqueWord);
-                frequencyDictionary.Add(uniqueWord, wordCount);
-            }
-
-            return frequencyDictionary;
+            container.Register(
+                Component
+                    .For<ILayouter>()
+                    .ImplementedBy<LayouterWithGeneratorSpiral>()
+                    .DependsOn(Dependency.OnValue("center", spiralCenter))
+                    .DependsOn(Dependency.OnComponent("spiral", "Spiral")));
         }
 
+
+        private static Color GetColor(string[] channels)
+        {
+            if (channels.Length != 4)
+                throw new ArgumentException("Was expecting 4 channels of color: alpha, red, green, blue");
+            var channelsValues = channels.Select(int.Parse).ToArray();
+            return Color.FromArgb(channelsValues[0], channelsValues[1], channelsValues[2], channelsValues[3]);
+        }
 
         public static Font BuildFontFromWeight(int tagWeight, int minTagWeight, int maxTagWeight, Options options)
         {
-            var fontSize = options.MinFontSize + (tagWeight - minTagWeight) * (options.MaxFontSize - options.MinFontSize) / (maxTagWeight - minTagWeight);
+            var fontSize = options.MinFontSize +
+                           (tagWeight - minTagWeight)*(options.MaxFontSize - options.MinFontSize)/
+                           (maxTagWeight - minTagWeight);
             return new Font(options.FontFamily, fontSize);
         }
     }

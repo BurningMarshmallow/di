@@ -109,6 +109,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\ConsoleClient.cs" />
+    <Compile Include="Client\IClient.cs" />
     <Compile Include="Spiral\CrossSpiral.cs" />
     <Compile Include="Spiral\EndlessSpiral.cs" />
     <Compile Include="Layouter\ILayouter.cs" />

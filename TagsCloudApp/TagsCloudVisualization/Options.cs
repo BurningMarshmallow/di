@@ -13,7 +13,7 @@ namespace TagsCloudVisualization
         HelpText = "Number of words to layout")]
         public int NumberOfWords { get; set; }
 
-        [Option('i', "text_input_file", DefaultValue = "w&p.txt",
+        [Option('i', "text_input_file", DefaultValue = "README.md",
             HelpText = "Name of text file containing words")]
         public string TextInputFile { get; set; }
 
