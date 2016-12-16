@@ -110,18 +110,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\BaseClient.cs" />
     <Compile Include="Client\ConsoleClient.cs" />
+    <Compile Include="Client\FontFactory.cs" />
     <Compile Include="Client\IClient.cs" />
+    <Compile Include="IFileReader.cs" />
+    <Compile Include="SettingsContainer.cs" />
+    <Compile Include="SettingsParser.cs" />
     <Compile Include="Spiral\CrossSpiral.cs" />
     <Compile Include="Spiral\EndlessSpiral.cs" />
     <Compile Include="Layouter\ILayouter.cs" />
     <Compile Include="Spiral\ISpiral.cs" />
     <Compile Include="Statistics\WordStatistics.cs" />
-    <Compile Include="Visualizer\BaseVisualizer.cs" />
+    <Compile Include="TxtFileReader.cs" />
+    <Compile Include="Visualization\FontInterval.cs" />
+    <Compile Include="Visualization\Visualizer.cs" />
     <Compile Include="Layouter\LayouterWithEndlessSpiral.cs" />
     <Compile Include="Options.cs" />
-    <Compile Include="Visualizer\ImageSettings.cs" />
-    <Compile Include="Visualizer\Tag.cs" />
+    <Compile Include="Visualization\ImageSettings.cs" />
+    <Compile Include="Visualization\Tag.cs" />
     <Compile Include="UnitTests\LayouterBenchmark.cs" />
     <Compile Include="UnitTests\LayouterWithEndlessSpiralTests.cs" />
     <Compile Include="UnitTests\LayouterTests.cs" />
@@ -131,12 +138,11 @@
     <Compile Include="Layouter\RectangleExtensions.cs" />
     <Compile Include="Spiral\CircleSpiral.cs" />
     <Compile Include="Layouter\RectangleFactory.cs" />
-    <Compile Include="Visualizer\BmpVisualizer.cs" />
-    <Compile Include="Visualizer\PngVisualizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

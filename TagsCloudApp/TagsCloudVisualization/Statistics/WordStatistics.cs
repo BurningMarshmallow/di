@@ -7,10 +7,10 @@ namespace TagsCloudVisualization.Statistics
 {
     class WordStatistics
     {
-        public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextFile(string[] text)
+        public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextFile(string[] textLines)
         {
             var frequencyDictionary = new Dictionary<string, int>();
-            var words = text
+            var words = textLines
                 .SelectMany(line => Regex.Split(line, @"\W+"))
                 .Where(word => word.Length > 4)
                 .Select(word => word.ToLower())
@@ -27,12 +27,12 @@ namespace TagsCloudVisualization.Statistics
             return frequencyDictionary;
         }
 
-        public static Font BuildFontFromWeight(int tagWeight, int minTagWeight, int maxTagWeight, Options options)
+        public static Font BuildFontFromWeight(int tagWeight, int minTagWeight, int maxTagWeight, int minFontSize, int maxFontSize, string fontFamily)
         {
-            var fontSize = options.MinFontSize +
-                           (tagWeight - minTagWeight) * (options.MaxFontSize - options.MinFontSize) /
+            var fontSize = minFontSize +
+                           (tagWeight - minTagWeight) * (maxFontSize - minFontSize) /
                            (maxTagWeight - minTagWeight);
-            return new Font(options.FontFamily, fontSize);
+            return new Font(fontFamily, fontSize);
         }
 
         public static KeyValuePair<string, int>[]  GetMostPopularWords(Dictionary<string, int> statistics, int numberOfWords)

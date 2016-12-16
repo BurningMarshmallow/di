@@ -1,48 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Castle.Windsor;
-using TagsCloudVisualization.Layouter;
-using TagsCloudVisualization.Statistics;
-using TagsCloudVisualization.Visualizer;
+﻿using CommandLine;
 
 namespace TagsCloudVisualization.Client
 {
-    class ConsoleClient : IClient
+    class ConsoleClient : BaseClient
     {
-        public void Run(IWindsorContainer container, Options options)
+        protected override SettingsContainer GetSettingsContainer(string[] args)
         {
-            var layouter = container.Resolve<ILayouter>();
-            string[] text;
-            try
+            var options = new Options();
+            Parser.Default.ParseArguments(args, options);
+            var settingsContainer = new SettingsContainer
             {
-                text = File.ReadAllLines(options.TextInputFile);
-            }
-            catch (FileNotFoundException)
-            {
-                Console.WriteLine("File was not found");
-                return;
-            }
-            var statistics = WordStatistics.GenerateFrequencyStatisticsFromTextFile(text);
-            var tags = LayoutTags(statistics, layouter, options);
-            var visualizer = container.Resolve<BaseVisualizer>();
-            visualizer.Visualize(options.ImageOutputFile, tags);
-        }
-
-        private static IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter, Options options)
-        {
-            var mostPopularWords = WordStatistics.GetMostPopularWords(statistics, options.NumberOfWords);
-
-            var minTagWeight = mostPopularWords.Last().Value;
-            var maxTagWeight = mostPopularWords.First().Value;
-
-            foreach (var pair in mostPopularWords)
-            {
-                var tag = new Tag(pair.Key, WordStatistics.BuildFontFromWeight(pair.Value, minTagWeight, maxTagWeight, options));
-                tag.Place = layouter.PutNextRectangle(tag.TagSize);
-                yield return tag;
-            }
+                NumberOfWords = options.NumberOfWords,
+                FontFamily = options.FontFamily,
+                ImageOutputFile = options.ImageOutputFile,
+                MaxFontSize = options.MaxFontSize,
+                MinFontSize = options.MinFontSize,
+                TextInputFile = options.TextInputFile
+            };
+            return settingsContainer;
         }
     }
 }

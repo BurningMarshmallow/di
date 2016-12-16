@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 
-namespace TagsCloudVisualization.Visualizer
+namespace TagsCloudVisualization.Visualization
 {
-    abstract class BaseVisualizer
+    public class Visualizer
     {
         private readonly int imageWidth;
         private readonly int imageHeight;
         private readonly Pen tagPen;
         private readonly Color backgroundColor;
 
-        protected BaseVisualizer()
+        public Visualizer()
         {
             backgroundColor = Color.Purple;
             tagPen = new Pen(Color.Orange, 3);
@@ -18,7 +19,7 @@ namespace TagsCloudVisualization.Visualizer
             imageHeight = 800;
         }
 
-        protected BaseVisualizer(ImageSettings imageSettings)
+        public Visualizer(ImageSettings imageSettings)
         {
             tagPen = new Pen(imageSettings.TagColor, 3);
             backgroundColor = imageSettings.BackgroundColor;
@@ -26,7 +27,7 @@ namespace TagsCloudVisualization.Visualizer
             imageHeight = imageSettings.ImageHeight;
         }
 
-        protected BaseVisualizer(Color tagColor, Color backgroundColor, int imageWidth, int imageHeight)
+        public Visualizer(Color tagColor, Color backgroundColor, int imageWidth, int imageHeight)
         {
             tagPen = new Pen(tagColor, 3);
             this.backgroundColor = backgroundColor;
@@ -34,16 +35,19 @@ namespace TagsCloudVisualization.Visualizer
             this.imageHeight = imageHeight;
         }
 
-        public void Visualize(string filename, IEnumerable<Tag> tags)
+        public void VisualizeTags(string filename, IEnumerable<Tag> tags, ImageFormat format)
         {
             var bitmap = new Bitmap(imageWidth, imageHeight);
             var graphics = Graphics.FromImage(bitmap);
             graphics.Clear(backgroundColor);
             DrawTags(tags, graphics);
-            SaveImage(bitmap, filename);
+            SaveImage(bitmap, filename, format);
         }
 
-        public abstract void SaveImage(Image bitmap, string filename);
+        private static void SaveImage(Image bitmap, string filename, ImageFormat format)
+        {
+            bitmap.Save(filename, format);
+        }
 
         private void DrawTags(IEnumerable<Tag> tags, Graphics graphics)
         {
@@ -59,7 +63,7 @@ namespace TagsCloudVisualization.Visualizer
             var bitmap = new Bitmap(imageWidth, imageHeight);
             var graphics = Graphics.FromImage(bitmap);
             DrawRectangles(tags, graphics);
-            SaveImage(bitmap, filename);
+            SaveImage(bitmap, filename, ImageFormat.Bmp);
         }
 
         private void DrawRectangles(IEnumerable<Rectangle> tags, Graphics graphics)

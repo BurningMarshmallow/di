@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace TagsCloudVisualization.Visualizer
+namespace TagsCloudVisualization.Visualization
 {
-    class ImageSettings
+    public class ImageSettings
     {
         public ImageSettings(int imageHeight, int imageWidth, Color backgroundColor, Color tagColor)
         {

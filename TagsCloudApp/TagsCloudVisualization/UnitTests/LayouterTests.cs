@@ -5,7 +5,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using TagsCloudVisualization.Layouter;
 using TagsCloudVisualization.Spiral;
-using TagsCloudVisualization.Visualizer;
+using TagsCloudVisualization.Visualization;
 
 namespace TagsCloudVisualization.UnitTests
 {
@@ -134,7 +134,7 @@ namespace TagsCloudVisualization.UnitTests
         {
             if (TestContext.CurrentContext.Result.Outcome.Status != TestStatus.Failed) return;
 
-            var visualizator = new BmpVisualizer();
+            var visualizator = new Visualization.Visualizer();
             var dir = TestContext.CurrentContext.TestDirectory;
             var testName = TestContext.CurrentContext.Test.Name;
             var path = dir + testName + ".bmp";

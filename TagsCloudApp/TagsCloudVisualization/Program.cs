@@ -1,12 +1,10 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using CommandLine;
 using TagsCloudVisualization.Client;
 using TagsCloudVisualization.Layouter;
 using TagsCloudVisualization.Spiral;
-using TagsCloudVisualization.Visualizer;
+using TagsCloudVisualization.Visualization;
 
 namespace TagsCloudVisualization
 {
@@ -14,34 +12,32 @@ namespace TagsCloudVisualization
     {
         public static void Main(string[] args)
         {
-            var options = new Options();
-            if (!Parser.Default.ParseArguments(args, options))
-            {
-                Console.WriteLine("Can't parse these args, check them");
-                return;
-            }
             var container = new WindsorContainer();
-            var imageSettings = SettingsParser.ParseImageSettings();
+            var imageSettings = SettingsParser.ParseImageSettings(@"..\..\Settings.config");
             if (imageSettings == null)
                 return;
 
             container.Register(
                 Component
-                    .For<IClient>()
+                    .For<IFileReader>()
+                    .ImplementedBy<TxtFileReader>());
+            container.Register(
+                Component
+                    .For<BaseClient>()
                     .ImplementedBy<ConsoleClient>());
+
             RegisterComponentsForVisualizer(container, imageSettings);
             RegisterComponentsForLayouter(container);
 
-            var client = container.Resolve<IClient>();
-            client.Run(container, options);
+            var client = container.Resolve<BaseClient>();
+            client.Run(container, args);
         }
 
         private static void RegisterComponentsForVisualizer(IWindsorContainer container, ImageSettings imageSettings)
         {
             container.Register(
                 Component
-                    .For<BaseVisualizer>()
-                    .ImplementedBy<PngVisualizer>()
+                    .For<Visualizer>()
                     .DependsOn(Dependency.OnValue("imageSettings", imageSettings))
             );
         }
