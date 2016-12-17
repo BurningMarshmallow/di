@@ -5,6 +5,7 @@ using TagsCloudVisualization.Client;
 using TagsCloudVisualization.Layouter;
 using TagsCloudVisualization.Spiral;
 using TagsCloudVisualization.Visualization;
+using TagsCloudVisualization.WordProcessor;
 
 namespace TagsCloudVisualization
 {
@@ -21,6 +22,10 @@ namespace TagsCloudVisualization
                 Component
                     .For<IFileReader>()
                     .ImplementedBy<TxtFileReader>());
+            container.Register(
+                Component
+                    .For<IWordProcessor>()
+                    .ImplementedBy<LowerCaseWordProcessor>());
             container.Register(
                 Component
                     .For<BaseClient>()

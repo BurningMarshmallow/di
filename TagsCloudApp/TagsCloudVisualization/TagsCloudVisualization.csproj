@@ -113,8 +113,9 @@
     <Compile Include="Client\BaseClient.cs" />
     <Compile Include="Client\ConsoleClient.cs" />
     <Compile Include="Client\FontFactory.cs" />
-    <Compile Include="Client\IClient.cs" />
-    <Compile Include="IFileReader.cs" />
+    <Compile Include="WordProcessor\IWordProcessor.cs" />
+    <Compile Include="WordProcessor\LowerCaseWordProcessor.cs" />
+    <Compile Include="FileReader\IFileReader.cs" />
     <Compile Include="SettingsContainer.cs" />
     <Compile Include="SettingsParser.cs" />
     <Compile Include="Spiral\CrossSpiral.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="Layouter\ILayouter.cs" />
     <Compile Include="Spiral\ISpiral.cs" />
     <Compile Include="Statistics\WordStatistics.cs" />
-    <Compile Include="TxtFileReader.cs" />
+    <Compile Include="FileReader\TxtFileReader.cs" />
     <Compile Include="Visualization\FontInterval.cs" />
     <Compile Include="Visualization\Visualizer.cs" />
     <Compile Include="Layouter\LayouterWithEndlessSpiral.cs" />
