@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.FileReader
 {
     public class TxtFileReader : IFileReader
     {
@@ -14,8 +14,12 @@ namespace TagsCloudVisualization
             catch (FileNotFoundException)
             {
                 Console.WriteLine("File was not found");
-                return null;
             }
+            catch (Exception)
+            {
+                Console.WriteLine("File can't be read");
+            }
+            return null;
         }
     }
 }

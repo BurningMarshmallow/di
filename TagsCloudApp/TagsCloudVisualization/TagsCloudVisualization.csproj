@@ -118,7 +118,7 @@
     <Compile Include="Statistics\LongWordsSelector.cs" />
     <Compile Include="Statistics\LowerCaseWordProcessor.cs" />
     <Compile Include="FileReader\IFileReader.cs" />
-    <Compile Include="SettingsContainer.cs" />
+    <Compile Include="TagCloudSettings.cs" />
     <Compile Include="SettingsParser.cs" />
     <Compile Include="Spiral\CrossSpiral.cs" />
     <Compile Include="Spiral\EndlessSpiral.cs" />
@@ -126,7 +126,8 @@
     <Compile Include="Spiral\ISpiral.cs" />
     <Compile Include="Statistics\WordStatistics.cs" />
     <Compile Include="FileReader\TxtFileReader.cs" />
-    <Compile Include="Visualization\FontInterval.cs" />
+    <Compile Include="UnitTests\StatisticsTests.cs" />
+    <Compile Include="UnitTests\TagCloudCreatingTests.cs" />
     <Compile Include="Visualization\Visualizer.cs" />
     <Compile Include="Layouter\LayouterWithEndlessSpiral.cs" />
     <Compile Include="Options.cs" />

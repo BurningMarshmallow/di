@@ -2,6 +2,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using TagsCloudVisualization.Client;
+using TagsCloudVisualization.FileReader;
 using TagsCloudVisualization.Layouter;
 using TagsCloudVisualization.Spiral;
 using TagsCloudVisualization.Statistics;
@@ -20,21 +21,10 @@ namespace TagsCloudVisualization
 
             container.Register(
                 Component
-                    .For<IFileReader>()
-                    .ImplementedBy<TxtFileReader>());
-            container.Register(
-                Component
-                    .For<IWordProcessor>()
-                    .ImplementedBy<LowerCaseWordProcessor>());
-            container.Register(
-                Component
-                    .For<IWordSelector>()
-                    .ImplementedBy<LongWordsSelector>());
-            container.Register(
-                Component
                     .For<BaseClient>()
                     .ImplementedBy<ConsoleClient>());
 
+            RegisterComponentsForStatistics(container);
             RegisterComponentsForVisualizer(container, imageSettings);
             RegisterComponentsForLayouter(container);
 
@@ -49,6 +39,23 @@ namespace TagsCloudVisualization
                     .For<Visualizer>()
                     .DependsOn(Dependency.OnValue("imageSettings", imageSettings))
             );
+        }
+
+
+        private static void RegisterComponentsForStatistics(IWindsorContainer container)
+        {
+            container.Register(
+                Component
+                    .For<IFileReader>()
+                    .ImplementedBy<TxtFileReader>());
+            container.Register(
+                Component
+                    .For<IWordProcessor>()
+                    .ImplementedBy<LowerCaseWordProcessor>());
+            container.Register(
+                Component
+                    .For<IWordSelector>()
+                    .ImplementedBy<LongWordsSelector>());
         }
 
 

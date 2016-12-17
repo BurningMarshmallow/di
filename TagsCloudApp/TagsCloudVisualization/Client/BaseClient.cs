@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.Linq;
 using Castle.Windsor;
+using TagsCloudVisualization.FileReader;
 using TagsCloudVisualization.Layouter;
 using TagsCloudVisualization.Statistics;
 using TagsCloudVisualization.Visualization;
@@ -15,12 +16,7 @@ namespace TagsCloudVisualization.Client
             var settings = GetSettingsContainer(args);
 
             var layouter = container.Resolve<ILayouter>();
-            var fileReader = container.Resolve<IFileReader>();
-            var wordProcessor = container.Resolve<IWordProcessor>();
-            var wordSelector = container.Resolve<IWordSelector>();
-
-            var textLines = fileReader.GetFileLines(settings.TextInputFile);
-            var statistics = WordStatistics.GenerateFrequencyStatisticsFromTextFile(textLines, wordProcessor, wordSelector);
+            var statistics = GetStatisticsFromTextFile(container, settings.TextInputFile);
             var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
 
             var tags = LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory);
@@ -28,7 +24,17 @@ namespace TagsCloudVisualization.Client
             visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp);
         }
 
-        protected abstract SettingsContainer GetSettingsContainer(string[] args);
+        private static Dictionary<string, int> GetStatisticsFromTextFile(IWindsorContainer container, string textInputFilename)
+        {
+            var fileReader = container.Resolve<IFileReader>();
+            var wordProcessor = container.Resolve<IWordProcessor>();
+            var wordSelector = container.Resolve<IWordSelector>();
+
+            var textLines = fileReader.GetFileLines(textInputFilename);
+            return WordStatistics.GenerateFrequencyStatisticsFromTextLines(textLines, wordProcessor, wordSelector);
+        }
+
+        protected abstract TagCloudSettings GetSettingsContainer(string[] args);
 
         protected static IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter,
             int numberOfWords, FontFactory fontFactory)
@@ -46,6 +52,5 @@ namespace TagsCloudVisualization.Client
                 yield return tag;
             }
         }
-
     }
 }

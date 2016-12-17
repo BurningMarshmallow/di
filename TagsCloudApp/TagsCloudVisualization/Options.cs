@@ -3,7 +3,7 @@ using CommandLine.Text;
 
 namespace TagsCloudVisualization
 {
-    public class Options : SettingsContainer
+    public class Options : TagCloudSettings
     {
         [OptionArray('n', "number_of_words", DefaultValue = 100,
         HelpText = "Number of words to layout")]

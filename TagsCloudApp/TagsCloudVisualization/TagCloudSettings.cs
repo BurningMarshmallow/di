@@ -1,6 +1,6 @@
 ﻿namespace TagsCloudVisualization
 {
-    public class SettingsContainer
+    public class TagCloudSettings
     {
         public string TextInputFile { get; set; }
         public int MaxFontSize { get; set; }

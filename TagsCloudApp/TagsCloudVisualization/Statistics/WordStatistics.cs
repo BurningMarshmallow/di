@@ -7,11 +7,10 @@ namespace TagsCloudVisualization.Statistics
 {
     class WordStatistics
     {
-        public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextFile(string[] textLines, IWordProcessor wordProcessor, IWordSelector wordSelector)
+        public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextLines(string[] textLines, IWordProcessor wordProcessor, IWordSelector wordSelector)
         {
             var frequencyDictionary = new Dictionary<string, int>();
-            var words = textLines
-                .SelectMany(line => Regex.Split(line, @"\W+"))
+            var words = GetWordsFromLines(textLines)
                 .Where(wordSelector.IsWordAcceptable)
                 .Select(wordProcessor.ProcessWord)
                 .ToArray();
@@ -25,6 +24,12 @@ namespace TagsCloudVisualization.Statistics
             }
 
             return frequencyDictionary;
+        }
+
+        public static IEnumerable<string> GetWordsFromLines(string[] lines)
+        {
+            return lines
+                .SelectMany(line => Regex.Split(line, @"\W+"));
         }
 
         public static Font BuildFontFromWeight(int tagWeight, int minTagWeight, int maxTagWeight, int minFontSize, int maxFontSize, string fontFamily)
