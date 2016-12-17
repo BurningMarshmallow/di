@@ -38,9 +38,9 @@ namespace TagsCloudVisualization
                 if (imageSettings[field] != null)
                     continue;
                 Console.WriteLine("{0} was not found in settings", field);
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
 
         private static Dictionary<string, string> GetImageSettings(string settingsFilename)
