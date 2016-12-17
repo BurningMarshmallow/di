@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using NUnit.Framework;
 using TagsCloudVisualization.Statistics;
 
@@ -123,6 +124,36 @@ namespace TagsCloudVisualization.UnitTests
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
             statistics.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void GetStatistics_ShouldContainLowerCaseKeys()
+        {
+            var lines = new[] { "Different CASES of element  is accEpTABle" };
+
+            var statistics = WordStatistics
+                .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
+            statistics.Should().ContainKeys("different", "element", "cases", "acceptable");
+        }
+
+        [Test]
+        public void GetStatistics_CountsSameWordTwice()
+        {
+            var lines = new[] { "horse horse" };
+
+            var statistics = WordStatistics
+                .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
+            statistics.Should().Contain(new KeyValuePair<string, int>("horse", 2));
+        }
+
+        [Test]
+        public void GetStatistics_CountsSameWordInDifferentCaseTwice()
+        {
+            var lines = new[] { "WorldWide worldwide" };
+
+            var statistics = WordStatistics
+                .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
+            statistics.Should().Contain(new KeyValuePair<string, int>("worldwide", 2));
         }
     }
 }
