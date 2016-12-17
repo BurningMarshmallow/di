@@ -4,9 +4,9 @@
 
 ###Пример файла настроек
 
-ImageWidth:800
-ImageHeight:800
-BackgroundColor:255 0 0 0
+ImageWidth:800</br>
+ImageHeight:800</br>
+BackgroundColor:255 0 0 0</br>
 TagColor:255 255 0 255
 
 ### Примеры облаков тегов:
