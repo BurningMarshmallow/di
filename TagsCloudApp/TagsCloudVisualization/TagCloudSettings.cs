@@ -8,5 +8,6 @@
         public string FontFamily { get; set; }
         public int NumberOfWords { get; set; }
         public string ImageOutputFile { get; set; }
+        public string SettingsFilename { get; set; }
     }
 }

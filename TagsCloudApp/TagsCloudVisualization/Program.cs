@@ -15,9 +15,6 @@ namespace TagsCloudVisualization
         public static void Main(string[] args)
         {
             var container = new WindsorContainer();
-            var imageSettings = SettingsParser.ParseImageSettings(@"..\..\Settings.config");
-            if (imageSettings == null)
-                return;
 
             container.Register(
                 Component
@@ -25,20 +22,10 @@ namespace TagsCloudVisualization
                     .ImplementedBy<ConsoleClient>());
 
             RegisterComponentsForStatistics(container);
-            RegisterComponentsForVisualizer(container, imageSettings);
             RegisterComponentsForLayouter(container);
 
             var client = container.Resolve<BaseClient>();
             client.Run(container, args);
-        }
-
-        private static void RegisterComponentsForVisualizer(IWindsorContainer container, ImageSettings imageSettings)
-        {
-            container.Register(
-                Component
-                    .For<Visualizer>()
-                    .DependsOn(Dependency.OnValue("imageSettings", imageSettings))
-            );
         }
 
 

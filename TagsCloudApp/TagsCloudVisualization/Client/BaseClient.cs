@@ -13,14 +13,17 @@ namespace TagsCloudVisualization.Client
     {
         public void Run(IWindsorContainer container, string[] args)
         {
-            var settings = GetSettingsContainer(args);
+            var settings = GetTagCloudSettings(args);
+            var imageSettings = SettingsParser.ParseImageSettings(settings.SettingsFilename);
+            if (imageSettings == null)
+                return;
+            var visualizer = new Visualizer(imageSettings);
 
             var layouter = container.Resolve<ILayouter>();
             var statistics = GetStatisticsFromTextFile(container, settings.TextInputFile);
             var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
 
             var tags = LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory);
-            var visualizer = container.Resolve<Visualizer>();
             visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp);
         }
 
@@ -34,7 +37,7 @@ namespace TagsCloudVisualization.Client
             return WordStatistics.GenerateFrequencyStatisticsFromTextLines(textLines, wordProcessor, wordSelector);
         }
 
-        protected abstract TagCloudSettings GetSettingsContainer(string[] args);
+        protected abstract TagCloudSettings GetTagCloudSettings(string[] args);
 
         protected static IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter,
             int numberOfWords, FontFactory fontFactory)

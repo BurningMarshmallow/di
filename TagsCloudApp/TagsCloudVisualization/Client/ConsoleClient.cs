@@ -4,7 +4,7 @@ namespace TagsCloudVisualization.Client
 {
     class ConsoleClient : BaseClient
     {
-        protected override TagCloudSettings GetSettingsContainer(string[] args)
+        protected override TagCloudSettings GetTagCloudSettings(string[] args)
         {
             var options = new Options();
             Parser.Default.ParseArguments(args, options);
@@ -15,7 +15,8 @@ namespace TagsCloudVisualization.Client
                 ImageOutputFile = options.ImageOutputFile,
                 MaxFontSize = options.MaxFontSize,
                 MinFontSize = options.MinFontSize,
-                TextInputFile = options.TextInputFile
+                TextInputFile = options.TextInputFile,
+                SettingsFilename = options.SettingsFilename
             };
             return settingsContainer;
         }

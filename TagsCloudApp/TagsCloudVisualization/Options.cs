@@ -25,6 +25,9 @@ namespace TagsCloudVisualization
         [Option('f', "font", DefaultValue = "Verdana", HelpText = "Font of words in the image")]
         public new string FontFamily { get; set; }
 
+        [Option('w', "settings_filename", DefaultValue = "Settings.config", HelpText = "Tag cloud settings filename")]
+        public new string SettingsFilename { get; set; }
+
         [HelpOption]
         public string GetUsage()
         {

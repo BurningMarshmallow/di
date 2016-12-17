@@ -12,6 +12,8 @@ namespace TagsCloudVisualization
         public static ImageSettings ParseImageSettings(string settingsFilename)
         {
             var imageSettings = GetImageSettings(settingsFilename);
+            if (imageSettings == null)
+                return null;
             if (imageSettings.Count == 0)
             {
                 Console.WriteLine("ImageSettings is empty.");
@@ -46,9 +48,9 @@ namespace TagsCloudVisualization
         private static Dictionary<string, string> GetImageSettings(string settingsFilename)
         {
             var fileReader = new TxtFileReader();
-            return fileReader
-                .GetFileLines(settingsFilename)
-                .Where(line => line.Contains(':'))
+            var fileLines = fileReader
+                .GetFileLines(settingsFilename);
+            return fileLines?.Where(line => line.Contains(':'))
                 .Select(x => x.Split(':'))
                 .ToDictionary(pair => pair[0], pair => pair[1]);
         }
