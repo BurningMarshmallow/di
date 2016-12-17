@@ -4,8 +4,8 @@ using Castle.Windsor;
 using TagsCloudVisualization.Client;
 using TagsCloudVisualization.Layouter;
 using TagsCloudVisualization.Spiral;
+using TagsCloudVisualization.Statistics;
 using TagsCloudVisualization.Visualization;
-using TagsCloudVisualization.WordProcessor;
 
 namespace TagsCloudVisualization
 {
@@ -26,6 +26,10 @@ namespace TagsCloudVisualization
                 Component
                     .For<IWordProcessor>()
                     .ImplementedBy<LowerCaseWordProcessor>());
+            container.Register(
+                Component
+                    .For<IWordSelector>()
+                    .ImplementedBy<LongWordsSelector>());
             container.Register(
                 Component
                     .For<BaseClient>()

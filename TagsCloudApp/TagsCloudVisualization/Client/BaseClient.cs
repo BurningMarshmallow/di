@@ -5,7 +5,6 @@ using Castle.Windsor;
 using TagsCloudVisualization.Layouter;
 using TagsCloudVisualization.Statistics;
 using TagsCloudVisualization.Visualization;
-using TagsCloudVisualization.WordProcessor;
 
 namespace TagsCloudVisualization.Client
 {
@@ -18,9 +17,10 @@ namespace TagsCloudVisualization.Client
             var layouter = container.Resolve<ILayouter>();
             var fileReader = container.Resolve<IFileReader>();
             var wordProcessor = container.Resolve<IWordProcessor>();
+            var wordSelector = container.Resolve<IWordSelector>();
 
             var textLines = fileReader.GetFileLines(settings.TextInputFile);
-            var statistics = WordStatistics.GenerateFrequencyStatisticsFromTextFile(textLines, wordProcessor);
+            var statistics = WordStatistics.GenerateFrequencyStatisticsFromTextFile(textLines, wordProcessor, wordSelector);
             var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
 
             var tags = LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory);

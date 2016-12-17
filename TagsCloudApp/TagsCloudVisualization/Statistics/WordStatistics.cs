@@ -2,18 +2,17 @@
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
-using TagsCloudVisualization.WordProcessor;
 
 namespace TagsCloudVisualization.Statistics
 {
     class WordStatistics
     {
-        public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextFile(string[] textLines, IWordProcessor wordProcessor)
+        public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextFile(string[] textLines, IWordProcessor wordProcessor, IWordSelector wordSelector)
         {
             var frequencyDictionary = new Dictionary<string, int>();
             var words = textLines
                 .SelectMany(line => Regex.Split(line, @"\W+"))
-                .Where(word => word.Length > 4)
+                .Where(wordSelector.IsWordAcceptable)
                 .Select(wordProcessor.ProcessWord)
                 .ToArray();
 

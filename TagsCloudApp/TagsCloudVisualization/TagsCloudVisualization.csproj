@@ -113,8 +113,10 @@
     <Compile Include="Client\BaseClient.cs" />
     <Compile Include="Client\ConsoleClient.cs" />
     <Compile Include="Client\FontFactory.cs" />
-    <Compile Include="WordProcessor\IWordProcessor.cs" />
-    <Compile Include="WordProcessor\LowerCaseWordProcessor.cs" />
+    <Compile Include="Statistics\IWordProcessor.cs" />
+    <Compile Include="Statistics\IWordSelector.cs" />
+    <Compile Include="Statistics\LongWordsSelector.cs" />
+    <Compile Include="Statistics\LowerCaseWordProcessor.cs" />
     <Compile Include="FileReader\IFileReader.cs" />
     <Compile Include="SettingsContainer.cs" />
     <Compile Include="SettingsParser.cs" />
