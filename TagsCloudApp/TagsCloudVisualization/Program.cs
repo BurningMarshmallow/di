@@ -38,7 +38,7 @@ namespace TagsCloudVisualization
             container.Register(
                 Component
                     .For<IWordProcessor>()
-                    .ImplementedBy<LowerCaseWordProcessor>());
+                    .ImplementedBy<LowerStemWordProcessor>());
             container.Register(
                 Component
                     .For<IWordSelector>()
