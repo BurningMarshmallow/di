@@ -7,7 +7,7 @@ using TagsCloudVisualization.Visualization;
 
 namespace TagsCloudVisualization
 {
-    class SettingsParser
+    public class SettingsParser
     {
         public static ImageSettings ParseImageSettings(string settingsFilename)
         {
