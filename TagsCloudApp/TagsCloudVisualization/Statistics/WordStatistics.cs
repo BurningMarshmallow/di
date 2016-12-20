@@ -32,14 +32,6 @@ namespace TagsCloudVisualization.Statistics
                 .SelectMany(line => Regex.Split(line, @"\W+"));
         }
 
-        public static Font BuildFontFromWeight(int tagWeight, int minTagWeight, int maxTagWeight, int minFontSize, int maxFontSize, string fontFamily)
-        {
-            var fontSize = minFontSize +
-                           (tagWeight - minTagWeight) * (maxFontSize - minFontSize) /
-                           (maxTagWeight - minTagWeight);
-            return new Font(fontFamily, fontSize);
-        }
-
         public static KeyValuePair<string, int>[]  GetMostPopularWords(Dictionary<string, int> statistics, int numberOfWords)
         {
             return statistics

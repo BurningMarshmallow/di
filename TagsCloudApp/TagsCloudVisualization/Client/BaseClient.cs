@@ -46,6 +46,8 @@ namespace TagsCloudVisualization.Client
 
             var minTagWeight = mostPopularWords.Last().Value;
             var maxTagWeight = mostPopularWords.First().Value;
+            if (maxTagWeight == minTagWeight)
+                minTagWeight -= 1;
 
             foreach (var pair in mostPopularWords)
             {

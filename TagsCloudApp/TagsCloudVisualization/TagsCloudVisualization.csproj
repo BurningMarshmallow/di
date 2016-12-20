@@ -117,6 +117,7 @@
     <Compile Include="Client\BaseClient.cs" />
     <Compile Include="Client\ConsoleClient.cs" />
     <Compile Include="Client\FontFactory.cs" />
+    <Compile Include="Result.cs" />
     <Compile Include="Statistics\IWordProcessor.cs" />
     <Compile Include="Statistics\IWordSelector.cs" />
     <Compile Include="Statistics\LongWordsSelector.cs" />

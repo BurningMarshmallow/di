@@ -6,7 +6,6 @@ using TagsCloudVisualization.FileReader;
 using TagsCloudVisualization.Layouter;
 using TagsCloudVisualization.Spiral;
 using TagsCloudVisualization.Statistics;
-using TagsCloudVisualization.Visualization;
 
 namespace TagsCloudVisualization
 {
