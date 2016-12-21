@@ -14,16 +14,16 @@ namespace TagsCloudVisualization.Client
         public void Run(IWindsorContainer container, string[] args)
         {
             var settings = GetTagCloudSettings(args);
+            var layouter = container.Resolve<ILayouter>();
+
+            var statistics = GetStatisticsFromTextFile(container, settings.TextInputFile);
+            var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
+            var tags = LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory);
+
             var imageSettings = SettingsParser.ParseImageSettings(settings.SettingsFilename);
             if (imageSettings == null)
                 return;
             var visualizer = new Visualizer(imageSettings);
-
-            var layouter = container.Resolve<ILayouter>();
-            var statistics = GetStatisticsFromTextFile(container, settings.TextInputFile);
-            var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
-
-            var tags = LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory);
             visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp);
         }
 

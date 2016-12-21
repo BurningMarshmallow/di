@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NHunspell;
 
 namespace TagsCloudVisualization.Statistics
@@ -10,10 +11,16 @@ namespace TagsCloudVisualization.Statistics
 
         public LowerStemWordProcessor()
         {
-            var result = Result.Of(() => new Hunspell("NHunspellDicionaries\\en_US.aff",
+            var result = Result.Of(() => new Hunspell("NHunpellDictionaries\\en_US.aff",
                     "NHunspellDictionaries\\en_US.dic"));
             if (result.IsSuccess)
                 stemCreator = result.Value;
+            else
+            {
+                Console.WriteLine("Dictionaries for NHunspell were not found," +
+                                  " please check that they are placed in NHunspellDictionaries directory");
+                Console.WriteLine("Tag cloud will be created without getting word stem");
+            }
         }
 
         public string ProcessWord(string word)
