@@ -13,7 +13,7 @@ namespace TagsCloudVisualization
         {
             var imageSettings = GetImageSettings(settingsFilename);
             if (imageSettings == null)
-                return Result.Fail<ImageSettings>("Filename can't be accessed");
+                return Result.Fail<ImageSettings>("Settings can't be found");
 
             return Result.Of(() =>
             {
