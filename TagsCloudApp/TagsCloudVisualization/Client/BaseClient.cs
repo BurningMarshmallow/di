@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using Castle.Windsor;
@@ -20,11 +21,11 @@ namespace TagsCloudVisualization.Client
             var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
             var tags = LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory);
 
-            var imageSettings = SettingsParser.ParseImageSettings(settings.SettingsFilename);
-            if (imageSettings == null)
-                return;
-            var visualizer = new Visualizer(imageSettings);
-            visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp);
+            SettingsParser.ParseImageSettings(settings.SettingsFilename)
+                .OnFail(Console.WriteLine)
+                .Then(imageSettings => new Visualizer(imageSettings))
+                .Then(visualizer =>
+                        visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp));
         }
 
         private static Dictionary<string, int> GetStatisticsFromTextFile(IWindsorContainer container, string textInputFilename)
@@ -36,7 +37,7 @@ namespace TagsCloudVisualization.Client
             var textLines = fileReader.GetFileLines(textInputFilename);
             return WordStatistics.GenerateFrequencyStatisticsFromTextLines(textLines, wordProcessor, wordSelector);
         }
-
+        
         protected abstract TagCloudSettings GetTagCloudSettings(string[] args);
 
         protected static IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter,

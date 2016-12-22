@@ -9,38 +9,36 @@ namespace TagsCloudVisualization
 {
     public class SettingsParser
     {
-        public static ImageSettings ParseImageSettings(string settingsFilename)
+        public static Result<ImageSettings> ParseImageSettings(string settingsFilename)
         {
             var imageSettings = GetImageSettings(settingsFilename);
             if (imageSettings == null)
-                return null;
-            if (imageSettings.Count == 0)
+                return Result.Fail<ImageSettings>("Filename can't be accessed");
+
+            return Result.Of(() =>
             {
-                Console.WriteLine("ImageSettings is empty.");
-            }
-            else
-            {
-                if (AreIncorrectSettings(imageSettings))
-                    return null;
+                var areCorrectSettings = Result.Of(() => AreCorrectSettings(imageSettings));
+                if (!areCorrectSettings.IsSuccess)
+                {
+                    throw new Exception(areCorrectSettings.Error);
+                }
                 
                 var imageHeight = int.Parse(imageSettings["ImageHeight"]);
                 var imageWidth = int.Parse(imageSettings["ImageWidth"]);
                 var backgroundColor = GetColor(imageSettings["BackgroundColor"].Split(' '));
                 var tagColor = GetColor(imageSettings["TagColor"].Split(' '));
                 return new ImageSettings(imageHeight, imageWidth, backgroundColor, tagColor);
-            }
-            return null;
+            });
         }
 
-        private static bool AreIncorrectSettings(IReadOnlyDictionary<string, string> imageSettings)
+        private static bool AreCorrectSettings(IReadOnlyDictionary<string, string> imageSettings)
         {
-            string[] fieldsToGet = { "ImageWidth", "ImageWidth", "BackgroundColor", "TagColor" };
+            string[] fieldsToGet = { "ImageHeight", "ImageWidth", "BackgroundColor", "TagColor" };
             foreach (var field in fieldsToGet)
             {
-                if (imageSettings[field] != null)
+                if (imageSettings.ContainsKey(field))
                     continue;
-                Console.WriteLine("{0} was not found in settings", field);
-                return true;
+                throw new KeyNotFoundException($"{field} was not found in settings");
             }
             return false;
         }
