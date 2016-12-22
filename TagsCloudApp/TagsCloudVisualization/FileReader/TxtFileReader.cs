@@ -7,9 +7,11 @@ namespace TagsCloudVisualization.FileReader
     {
         public string[] GetFileLines(string filename)
         {
+            Result<string[]> fileLines;
             try
             {
-                return File.ReadAllLines(filename);
+                fileLines = Result.Of(() => File.ReadAllLines(filename));
+                return fileLines.Value;
             }
             catch (FileNotFoundException)
             {
