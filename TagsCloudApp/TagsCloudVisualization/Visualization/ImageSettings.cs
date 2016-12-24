@@ -4,6 +4,11 @@ namespace TagsCloudVisualization.Visualization
 {
     public class ImageSettings
     {
+        public ImageSettings()
+        {
+            
+        }
+
         public ImageSettings(int imageHeight, int imageWidth, Color backgroundColor, Color tagColor)
         {
             ImageHeight = imageHeight;
@@ -12,12 +17,12 @@ namespace TagsCloudVisualization.Visualization
             TagColor = tagColor;
         }
 
-        public Color TagColor { get; }
+        public Color TagColor { get; set; }
 
-        public Color BackgroundColor { get; }
+        public Color BackgroundColor { get; set; }
         
-        public int ImageWidth { get; }
+        public int ImageWidth { get; set; }
 
-        public int ImageHeight { get; }
+        public int ImageHeight { get; set; }
     }
 }

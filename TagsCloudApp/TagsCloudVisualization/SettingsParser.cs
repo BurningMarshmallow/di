@@ -18,12 +18,16 @@ namespace TagsCloudVisualization
             }
 
             var ims = imageSettings.Value;
+            //var results = GetFieldResults(ims);
             return AreAllFieldsInSettings(ims)
-                .Then(_ => new ImageSettings(
-                        int.Parse(ims["ImageHeight"]),
-                        int.Parse(ims["ImageWidth"]),
-                        GetColor(ims["BackgroundColor"].Split(' ')),
-                        GetColor(ims["TagColor"].Split(' ')))
+                .Then(_ =>
+                    {
+                        return Result.Of(() => new ImageSettings(
+                            int.Parse(ims["ImageHeight"]),
+                            int.Parse(ims["ImageWidth"]),
+                            GetColor(ims["BackgroundColor"].Split(' ')).Value,
+                            GetColor(ims["TagColor"].Split(' ')).Value));
+                    }
                 );
         }
 
@@ -36,7 +40,7 @@ namespace TagsCloudVisualization
                     continue;
                 return Result.Fail<bool>($"{field} was not found in settings");
             }
-            return new Result<bool>(); 
+            return new Result<bool>();
         }
 
         private static Result<Dictionary<string, string>> GetImageSettings(string settingsFilename)
@@ -46,16 +50,16 @@ namespace TagsCloudVisualization
                 .GetFileLines(settingsFilename);
             return fileLines.Then(
                 lines => lines.Where(line => line.Contains(':'))
-                .Select(x => x.Split(':'))
-                .ToDictionary(pair => pair[0], pair => pair[1]));
+                    .Select(x => x.Split(':'))
+                    .ToDictionary(pair => pair[0], pair => pair[1]));
         }
 
-        private static Color GetColor(IReadOnlyCollection<string> channels)
+        private static Result<Color> GetColor(IReadOnlyCollection<string> channels)
         {
             if (channels.Count != 4)
-                throw new ArgumentException("Was expecting 4 channels of color: alpha, red, green, blue");
+                return Result.Fail<Color>("Was expecting 4 channels of color: alpha, red, green, blue");
             var channelsValues = channels.Select(int.Parse).ToArray();
-            return Color.FromArgb(channelsValues[0], channelsValues[1], channelsValues[2], channelsValues[3]);
+            return Result.Ok(Color.FromArgb(channelsValues[0], channelsValues[1], channelsValues[2], channelsValues[3]));
         }
     }
 }

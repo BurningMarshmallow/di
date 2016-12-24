@@ -23,7 +23,7 @@ namespace TagsCloudVisualization.Client
                 .Then(
                     statistics =>
                             LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory, settings.FontFamily))
-                .Then(tags => SettingsParser.ParseImageSettings(settings.SettingsFilename)
+                .Then(tags => YamlParser.ParseImageSettings(settings.SettingsFilename)
                     .OnFail(PrintErrorMessage)
                     .Then(imageSettings => new Visualizer(imageSettings))
                     .Then(visualizer =>
