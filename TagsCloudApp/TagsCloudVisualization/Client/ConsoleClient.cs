@@ -22,9 +22,9 @@ namespace TagsCloudVisualization.Client
             return settingsContainer;
         }
 
-        protected override Action<string> PrintErrorMessage()
+        protected override void PrintErrorMessage(string m)
         {
-            return Console.WriteLine;
+            Console.WriteLine(m);
         }
     }
 }

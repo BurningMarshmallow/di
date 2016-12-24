@@ -22,26 +22,26 @@ namespace TagsCloudVisualization.Client
             var tags = LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory);
 
             SettingsParser.ParseImageSettings(settings.SettingsFilename)
-                .OnFail(Console.WriteLine)
+                .OnFail(PrintErrorMessage)
                 .Then(imageSettings => new Visualizer(imageSettings))
                 .Then(visualizer =>
                         visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp));
         }
 
-        private static Dictionary<string, int> GetStatisticsFromTextFile(IWindsorContainer container, string textInputFilename)
+        private Dictionary<string, int> GetStatisticsFromTextFile(IWindsorContainer container, string textInputFilename)
         {
             var fileReader = container.Resolve<IFileReader>();
             var wordProcessor = container.Resolve<IWordProcessor>();
             var wordSelector = container.Resolve<IWordSelector>();
 
-            var textLines = fileReader.GetFileLines(textInputFilename);
-                //.OnFail(PrintErrorMessage)
+            var textLines = fileReader.GetFileLines(textInputFilename)
+                .OnFail(PrintErrorMessage);
             return WordStatistics.GenerateFrequencyStatisticsFromTextLines(textLines.Value, wordProcessor, wordSelector);
         }
         
         protected abstract TagCloudSettings GetTagCloudSettings(string[] args);
 
-        protected abstract Action<string> PrintErrorMessage();
+        protected abstract void PrintErrorMessage(string message);
 
         protected static IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter,
             int numberOfWords, FontFactory fontFactory)
