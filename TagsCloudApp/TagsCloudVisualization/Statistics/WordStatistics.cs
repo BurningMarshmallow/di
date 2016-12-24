@@ -12,15 +12,14 @@ namespace TagsCloudVisualization.Statistics
             var frequencyDictionary = new Dictionary<string, int>();
             var words = GetWordsFromLines(textLines)
                 .Where(wordSelector.IsWordAcceptable)
-                .Select(wordProcessor.ProcessWord)
-                .ToArray();
+                .Select(wordProcessor.ProcessWord);
 
-            var uniqueWords = words.Distinct();
-
-            foreach (var uniqueWord in uniqueWords)
+            foreach (var word in words)
             {
-                var wordCount = words.Count(word => word == uniqueWord);
-                frequencyDictionary.Add(uniqueWord, wordCount);
+                if (frequencyDictionary.ContainsKey(word))
+                    frequencyDictionary[word]++;
+                else
+                    frequencyDictionary[word] = 1;
             }
 
             return frequencyDictionary;

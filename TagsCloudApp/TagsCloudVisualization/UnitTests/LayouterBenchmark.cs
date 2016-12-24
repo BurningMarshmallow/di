@@ -10,7 +10,7 @@ namespace TagsCloudVisualization.UnitTests
     [SimpleJob(1, 1, 1, "BasicBenchmark")]
     public class LayouterBench
     {
-        [Params(3, 5)]
+        [Params(1000)]
         public int NumberOfRectangles { get; set; }
 
         public static readonly Point Center = new Point(400, 400);
@@ -22,7 +22,7 @@ namespace TagsCloudVisualization.UnitTests
         [Setup]
         public void Setup()
         {
-            LayouterWithEndlessSpiral = new LayouterWithEndlessSpiral(Center);
+            //LayouterWithEndlessSpiral = new /*LayouterWithEndlessSpiral*/(Center);
             LayouterWithGeneratorSpiral = new LayouterWithGeneratorSpiral(Center, CircleSpiral);
         }
 

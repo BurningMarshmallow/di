@@ -47,7 +47,7 @@ namespace TagsCloudVisualization
         {
             var fileReader = new TxtFileReader();
             var fileLines = fileReader
-                .GetFileLines(settingsFilename);
+                .GetFileLines(settingsFilename).Value;
             return fileLines?.Where(line => line.Contains(':'))
                 .Select(x => x.Split(':'))
                 .ToDictionary(pair => pair[0], pair => pair[1]);

@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System;
+using CommandLine;
 
 namespace TagsCloudVisualization.Client
 {
@@ -19,6 +20,11 @@ namespace TagsCloudVisualization.Client
                 SettingsFilename = options.SettingsFilename
             };
             return settingsContainer;
+        }
+
+        protected override Action<string> PrintErrorMessage()
+        {
+            return Console.WriteLine;
         }
     }
 }

@@ -35,10 +35,13 @@ namespace TagsCloudVisualization.Client
             var wordSelector = container.Resolve<IWordSelector>();
 
             var textLines = fileReader.GetFileLines(textInputFilename);
-            return WordStatistics.GenerateFrequencyStatisticsFromTextLines(textLines, wordProcessor, wordSelector);
+                //.OnFail(PrintErrorMessage)
+            return WordStatistics.GenerateFrequencyStatisticsFromTextLines(textLines.Value, wordProcessor, wordSelector);
         }
         
         protected abstract TagCloudSettings GetTagCloudSettings(string[] args);
+
+        protected abstract Action<string> PrintErrorMessage();
 
         protected static IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter,
             int numberOfWords, FontFactory fontFactory)

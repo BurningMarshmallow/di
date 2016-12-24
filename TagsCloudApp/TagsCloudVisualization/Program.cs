@@ -14,7 +14,8 @@ namespace TagsCloudVisualization
         public static void Main(string[] args)
         {
             var container = new WindsorContainer();
-
+//yaml
+            //container
             container.Register(
                 Component
                     .For<BaseClient>()

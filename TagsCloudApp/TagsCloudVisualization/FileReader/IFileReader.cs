@@ -2,6 +2,6 @@
 {
     public interface IFileReader
     {
-        string[] GetFileLines(string filename);
+        Result<string[]> GetFileLines(string filename);
     }
 }
