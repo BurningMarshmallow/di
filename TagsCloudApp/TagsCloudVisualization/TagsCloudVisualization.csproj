@@ -118,6 +118,7 @@
     <Compile Include="Client\ConsoleClient.cs" />
     <Compile Include="Client\FontFactory.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="ResultClassFactory.cs" />
     <Compile Include="Statistics\IWordProcessor.cs" />
     <Compile Include="Statistics\IWordSelector.cs" />
     <Compile Include="Statistics\LongWordsSelector.cs" />
@@ -159,7 +160,7 @@
     </None>
     <None Include="packages.config" />
     <None Include="README.md" />
-    <None Include="s.config">
+    <None Include="Settings.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

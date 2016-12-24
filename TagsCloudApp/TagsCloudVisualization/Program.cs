@@ -14,8 +14,7 @@ namespace TagsCloudVisualization
         public static void Main(string[] args)
         {
             var container = new WindsorContainer();
-//yaml
-            //container
+
             container.Register(
                 Component
                     .For<BaseClient>()
@@ -35,10 +34,10 @@ namespace TagsCloudVisualization
                 Component
                     .For<IFileReader>()
                     .ImplementedBy<TxtFileReader>());
-            container.Register(
-                Component
-                    .For<IWordProcessor>()
-                    .ImplementedBy<LowerStemWordProcessor>());
+            //container.Register(
+            //    Component
+            //        .For<IWordProcessor>()
+            //        .ImplementedBy<LowerStemWordProcessor>());
             container.Register(
                 Component
                     .For<IWordSelector>()

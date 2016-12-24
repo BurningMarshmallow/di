@@ -4,8 +4,7 @@ using NHunspell;
 
 namespace TagsCloudVisualization.Statistics
 {
-
-    class LowerStemWordProcessor : IWordProcessor
+    public class LowerStemWordProcessor : IWordProcessor
     {
         private readonly Hunspell stemCreator;
 
@@ -17,9 +16,8 @@ namespace TagsCloudVisualization.Statistics
                 stemCreator = result.Value;
             else
             {
-                Console.WriteLine("Dictionaries for NHunspell were not found," +
-                                  " please check that they are placed in NHunspellDictionaries directory");
-                Console.WriteLine("Tag cloud will be created without getting word stem");
+                throw new ArgumentException("Dictionaries for NHunspell were not found" +
+                                            ", Tag cloud will be created without getting word stem");
             }
         }
 
