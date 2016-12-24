@@ -9,17 +9,17 @@ namespace TagsCloudVisualization
     {
         public static Result<ImageSettings> ParseImageSettings(string settingsFilename)
         {
-            var document = File.ReadAllText(settingsFilename);
+            var config = Result.Of(() => File.ReadAllText(settingsFilename));
+            if (!config.IsSuccess)
+            {
+                return Result.Fail<ImageSettings>("Settings can't be found");
+            }
 #pragma warning disable 618
             var deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
 #pragma warning restore 618
 
-            var settings = deserializer.Deserialize<ImageSettings>(document);
-            return Result.Ok(settings);
-            //Console.WriteLine(settings.BackgroundColor);
-            //Console.WriteLine(settings.TagColor);
-            //Console.WriteLine(settings.ImageHeight);
-            //Console.WriteLine(settings.ImageWidth);
+            var settings = Result.Of(() => deserializer.Deserialize<ImageSettings>(config.Value));
+            return settings.ReplaceError(m => "Settings are incorrect");
         }
     }
 }
