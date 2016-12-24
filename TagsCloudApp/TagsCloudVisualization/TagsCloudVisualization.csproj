@@ -160,7 +160,7 @@
     </None>
     <None Include="packages.config" />
     <None Include="README.md" />
-    <None Include="Settings.config">
+    <None Include="s.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -11,7 +11,9 @@ namespace TagsCloudVisualization.Statistics
             var frequencyDictionary = new Dictionary<string, int>();
             var words = GetWordsFromLines(textLines)
                 .Where(wordSelector.IsWordAcceptable)
-                .Select(wordProcessor.ProcessWord);
+                .Select(word => wordProcessor == null
+                ? word
+                : wordProcessor.ProcessWord(word));
 
             foreach (var word in words)
             {

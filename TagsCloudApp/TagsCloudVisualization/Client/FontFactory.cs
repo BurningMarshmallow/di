@@ -5,14 +5,14 @@ namespace TagsCloudVisualization.Client
 {
     public class FontFactory
     {
-        public readonly int MinFontSize;
-        public readonly int MaxFontSize;
+        private readonly int minFontSize;
+        private readonly int maxFontSize;
         public readonly FontFamily FontFamily;
 
         public FontFactory(int optionsMinFontSize, int optionsMaxFontSize, string optionsFontFamily)
         {
-            MinFontSize = optionsMinFontSize;
-            MaxFontSize = optionsMaxFontSize;
+            minFontSize = optionsMinFontSize;
+            maxFontSize = optionsMaxFontSize;
             var result = CreateFontFamilyFromName(optionsFontFamily);
             if (result.IsSuccess)
             {
@@ -32,8 +32,8 @@ namespace TagsCloudVisualization.Client
 
         public Font CreateFontFromWeight(int tagWeight, int minTagWeight, int maxTagWeight)
         {
-            var fontSize = MinFontSize +
-               (tagWeight - minTagWeight) * (MaxFontSize - MinFontSize) /
+            var fontSize = minFontSize +
+               (tagWeight - minTagWeight) * (maxFontSize - minFontSize) /
                (maxTagWeight - minTagWeight);
             return new Font(FontFamily, fontSize);
         }

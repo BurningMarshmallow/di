@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace TagsCloudVisualization.FileReader
 {
@@ -7,19 +6,11 @@ namespace TagsCloudVisualization.FileReader
     {
         public Result<string[]> GetFileLines(string filename)
         {
-            try
-            {
-                var fileLines = Result.Of(() => File.ReadAllLines(filename));
-                return fileLines;
-            }
-            catch (FileNotFoundException)
-            {
-                return Result.Fail<string[]>("File was not found");
-            }
-            catch (Exception)
-            {
-                return Result.Fail<string[]>("File can't be read");
-            }
+            var fileLines = Result.Of(() => File.ReadAllLines(filename));
+                return fileLines
+                .ReplaceError(m => m.StartsWith("Could not find file")
+                ? "File was not found"
+                : "File can't be read");
         }
     }
 }
