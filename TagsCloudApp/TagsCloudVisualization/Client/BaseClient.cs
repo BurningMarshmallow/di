@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using Castle.Windsor;
@@ -19,7 +20,9 @@ namespace TagsCloudVisualization.Client
 
             var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
             GetStatisticsFromTextFile(container, settings.TextInputFile)
-                .Then(statistics => LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory))
+                .Then(
+                    statistics =>
+                            LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory, settings.FontFamily))
                 .Then(tags => SettingsParser.ParseImageSettings(settings.SettingsFilename)
                     .OnFail(PrintErrorMessage)
                     .Then(imageSettings => new Visualizer(imageSettings))
@@ -40,7 +43,7 @@ namespace TagsCloudVisualization.Client
             var wordProcessor = ResultClassFactory<LowerStemWordProcessor>.Create(
                     "Dictionaries for NHunspell were not found" +
                     ",\nTag cloud will be created without getting word stem")
-                   .OnFail(PrintErrorMessage);
+                .OnFail(PrintErrorMessage);
 
             return WordStatistics.GenerateFrequencyStatisticsFromTextLines(
                 textLines.Value, wordProcessor.Value, wordSelector);
@@ -50,8 +53,8 @@ namespace TagsCloudVisualization.Client
 
         protected abstract void PrintErrorMessage(string message);
 
-        protected static IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter,
-            int numberOfWords, FontFactory fontFactory)
+        protected IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter,
+            int numberOfWords, FontFactory fontFactory, string fontFamilyName)
         {
             var mostPopularWords = WordStatistics.GetMostPopularWords(statistics, numberOfWords);
 
@@ -59,14 +62,26 @@ namespace TagsCloudVisualization.Client
             var maxTagWeight = mostPopularWords.First().Value;
             if (maxTagWeight == minTagWeight)
                 minTagWeight -= 1;
+            var fontFamily = CreateFontFamilyFromName(fontFamilyName);
 
             foreach (var pair in mostPopularWords)
             {
                 var tag = new Tag(pair.Key,
-                    fontFactory.CreateFontFromWeight(pair.Value, minTagWeight, maxTagWeight));
+                    fontFactory.CreateFontFromWeight(pair.Value, minTagWeight, maxTagWeight, fontFamily));
                 tag.Place = layouter.PutNextRectangle(tag.TagSize);
                 yield return tag;
             }
+        }
+
+        private FontFamily CreateFontFamilyFromName(string name)
+        {
+            var result = Result.Of(() => new FontFamily(name));
+            if (result.IsSuccess)
+            {
+                return result.Value;
+            }
+            PrintErrorMessage("Font name can't be recognised, going to use Verdana");
+            return new FontFamily("Verdana");
         }
     }
 }
