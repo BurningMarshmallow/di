@@ -17,11 +17,11 @@ namespace TagsCloudVisualization.UnitTests
             wordProcessor = new LowerCaseWordProcessor();
             wordSelector = new LongWordsSelector();
         }
-        
+
         [Test]
         public void GetWordsFromSingleWord_IsSingleWord()
         {
-            var lines = new[] {"abe"};
+            var lines = new[] { "abe" };
 
             WordStatistics.GetWordsFromLines(lines)
                 .Should().BeEquivalentTo("abe");
@@ -30,7 +30,7 @@ namespace TagsCloudVisualization.UnitTests
         [Test]
         public void GetWordsFromTwoWordsSeparatedBySpaces_ShouldBeTwoWords()
         {
-            var lines = new[] {"cat dog"};
+            var lines = new[] { "cat dog" };
 
             WordStatistics.GetWordsFromLines(lines)
                 .Should().BeEquivalentTo("cat", "dog");
@@ -39,7 +39,7 @@ namespace TagsCloudVisualization.UnitTests
         [Test]
         public void GetWordsFromThreeWordsSeparatedBySpaces_ShouldBeThreeWords()
         {
-            var lines = new[] {"ab c    de"};
+            var lines = new[] { "ab c    de" };
 
             WordStatistics.GetWordsFromLines(lines)
                 .Should().BeEquivalentTo("ab", "c", "de");
@@ -48,7 +48,7 @@ namespace TagsCloudVisualization.UnitTests
         [Test]
         public void GetWordsFromTwoWordsSeparatedByDelimiters_ShouldBeTwoWords()
         {
-            var lines = new[] {"first:/+&   -%#second"};
+            var lines = new[] { "first:/+&   -%#second" };
 
             WordStatistics.GetWordsFromLines(lines)
                 .Should().BeEquivalentTo("first", "second");
@@ -61,7 +61,7 @@ namespace TagsCloudVisualization.UnitTests
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Should().BeEmpty();
+            statistics.Value.Should().BeEmpty();
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace TagsCloudVisualization.UnitTests
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Should().BeEmpty();
+            statistics.Value.Should().BeEmpty();
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace TagsCloudVisualization.UnitTests
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Should().BeEmpty();
+            statistics.Value.Should().BeEmpty();
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace TagsCloudVisualization.UnitTests
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Should().ContainKeys("verylong", "orbital");
+            statistics.Value.Should().ContainKeys("verylong", "orbital");
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace TagsCloudVisualization.UnitTests
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Should().BeEmpty();
+            statistics.Value.Should().BeEmpty();
         }
 
         [Test]
@@ -111,19 +111,19 @@ namespace TagsCloudVisualization.UnitTests
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Count.Should().Be(2);
-            statistics.Should().ContainKeys("answer", "deeply");
+            statistics.Value.Count.Should().Be(2);
+            statistics.Value.Should().ContainKeys("answer", "deeply");
         }
 
 
         [Test]
         public void GetStatisticsFromSomeWords_ShouldNotBeEmpty()
         {
-            var lines = new[] {"first second"};
+            var lines = new[] { "first second" };
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Should().NotBeEmpty();
+            statistics.Value.Should().NotBeEmpty();
         }
 
         [Test]
@@ -133,7 +133,7 @@ namespace TagsCloudVisualization.UnitTests
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Should().ContainKeys("different", "element", "cases", "acceptable");
+            statistics.Value.Should().ContainKeys("different", "element", "cases", "acceptable");
         }
 
         [Test]
@@ -143,7 +143,7 @@ namespace TagsCloudVisualization.UnitTests
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Should().Contain(new KeyValuePair<string, int>("horse", 2));
+            statistics.Value.Should().Contain(new KeyValuePair<string, int>("horse", 2));
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace TagsCloudVisualization.UnitTests
 
             var statistics = WordStatistics
                 .GenerateFrequencyStatisticsFromTextLines(lines, wordProcessor, wordSelector);
-            statistics.Should().Contain(new KeyValuePair<string, int>("worldwide", 2));
+            statistics.Value.Should().Contain(new KeyValuePair<string, int>("worldwide", 2));
         }
     }
 }

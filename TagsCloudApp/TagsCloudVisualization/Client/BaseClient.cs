@@ -17,36 +17,35 @@ namespace TagsCloudVisualization.Client
             var settings = GetTagCloudSettings(args);
             var layouter = container.Resolve<ILayouter>();
 
-            var statistics = GetStatisticsFromTextFile(container, settings.TextInputFile);
-            var fontFactory = new  FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
-            var tags = LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory);
-
-            SettingsParser.ParseImageSettings(settings.SettingsFilename)
-                .OnFail(PrintErrorMessage)
-                .Then(imageSettings => new Visualizer(imageSettings))
-                .Then(visualizer =>
-                        visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp));
+            var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
+            GetStatisticsFromTextFile(container, settings.TextInputFile)
+                .Then(statistics => LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory))
+                .Then(tags => SettingsParser.ParseImageSettings(settings.SettingsFilename)
+                    .OnFail(PrintErrorMessage)
+                    .Then(imageSettings => new Visualizer(imageSettings))
+                    .Then(visualizer =>
+                            visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp)));
         }
 
-        private Dictionary<string, int> GetStatisticsFromTextFile(IWindsorContainer container, string textInputFilename)
+        private Result<Dictionary<string, int>> GetStatisticsFromTextFile(IWindsorContainer container,
+            string textInputFilename)
         {
             var fileReader = container.Resolve<IFileReader>();
-            //var wordProcessor = container.Resolve<IWordProcessor>();
-            var wordProcessor = ResultClassFactory<LowerStemWordProcessor>.Create();
-            if (!wordProcessor.IsSuccess)
-            {
-                Console.WriteLine(wordProcessor.Error);
-                Console.WriteLine(wordProcessor.Error);
-
-                return null;
-            }
             var wordSelector = container.Resolve<IWordSelector>();
+
+            //var wordProcessor = container.Resolve<IWordProcessor>();
 
             var textLines = fileReader.GetFileLines(textInputFilename)
                 .OnFail(PrintErrorMessage);
-            return WordStatistics.GenerateFrequencyStatisticsFromTextLines(textLines.Value, wordProcessor.Value, wordSelector);
+            var wordProcessor = ResultClassFactory<LowerStemWordProcessor>.Create(
+                    "Dictionaries for NHunspell were not found" +
+                    ",\nTag cloud will be created without getting word stem")
+                   .OnFail(PrintErrorMessage);
+
+            return WordStatistics.GenerateFrequencyStatisticsFromTextLines(
+                textLines.Value, wordProcessor.Value, wordSelector);
         }
-        
+
         protected abstract TagCloudSettings GetTagCloudSettings(string[] args);
 
         protected abstract void PrintErrorMessage(string message);

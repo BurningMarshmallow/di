@@ -16,8 +16,7 @@ namespace TagsCloudVisualization.Statistics
                 stemCreator = result.Value;
             else
             {
-                throw new ArgumentException("Dictionaries for NHunspell were not found" +
-                                            ", Tag cloud will be created without getting word stem");
+                throw new ArgumentException();
             }
         }
 

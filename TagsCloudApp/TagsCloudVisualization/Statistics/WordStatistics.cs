@@ -6,7 +6,7 @@ namespace TagsCloudVisualization.Statistics
 {
     class WordStatistics
     {
-        public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextLines(string[] textLines, IWordProcessor wordProcessor, IWordSelector wordSelector)
+        public static Result<Dictionary<string, int>> GenerateFrequencyStatisticsFromTextLines(string[] textLines, IWordProcessor wordProcessor, IWordSelector wordSelector)
         {
             var frequencyDictionary = new Dictionary<string, int>();
             var words = GetWordsFromLines(textLines)
@@ -21,7 +21,7 @@ namespace TagsCloudVisualization.Statistics
                     frequencyDictionary[word] = 1;
             }
 
-            return frequencyDictionary;
+            return Result.Ok(frequencyDictionary);
         }
 
         public static IEnumerable<string> GetWordsFromLines(string[] lines)
