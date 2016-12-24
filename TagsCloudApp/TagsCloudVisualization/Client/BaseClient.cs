@@ -36,8 +36,6 @@ namespace TagsCloudVisualization.Client
             var fileReader = container.Resolve<IFileReader>();
             var wordSelector = container.Resolve<IWordSelector>();
 
-            //var wordProcessor = container.Resolve<IWordProcessor>();
-
             var textLines = fileReader.GetFileLines(textInputFilename)
                 .OnFail(PrintErrorMessage);
             var wordProcessor = ResultClassFactory<LowerStemWordProcessor>.Create(

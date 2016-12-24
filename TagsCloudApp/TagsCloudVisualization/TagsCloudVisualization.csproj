@@ -130,7 +130,6 @@
     <Compile Include="FileReader\IFileReader.cs" />
     <Compile Include="Statistics\LowerStemWordProcessor.cs" />
     <Compile Include="TagCloudSettings.cs" />
-    <Compile Include="SettingsParser.cs" />
     <Compile Include="Spiral\CrossSpiral.cs" />
     <Compile Include="Spiral\EndlessSpiral.cs" />
     <Compile Include="Layouter\ILayouter.cs" />

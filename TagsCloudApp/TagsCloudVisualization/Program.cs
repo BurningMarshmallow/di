@@ -34,10 +34,6 @@ namespace TagsCloudVisualization
                 Component
                     .For<IFileReader>()
                     .ImplementedBy<TxtFileReader>());
-            //container.Register(
-            //    Component
-            //        .For<IWordProcessor>()
-            //        .ImplementedBy<LowerStemWordProcessor>());
             container.Register(
                 Component
                     .For<IWordSelector>()
