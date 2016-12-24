@@ -11,7 +11,7 @@ namespace TagsCloudVisualization.Statistics
 
         public LowerStemWordProcessor()
         {
-            var result = Result.Of(() => new Hunspell("NHunpellDictionaries\\en_US.aff",
+            var result = Result.Of(() => new Hunspell("NHunspellDictonaries\\en_US.aff",
                     "NHunspellDictionaries\\en_US.dic"));
             if (result.IsSuccess)
                 stemCreator = result.Value;

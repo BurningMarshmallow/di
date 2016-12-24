@@ -12,45 +12,42 @@ namespace TagsCloudVisualization
         public static Result<ImageSettings> ParseImageSettings(string settingsFilename)
         {
             var imageSettings = GetImageSettings(settingsFilename);
-            if (imageSettings == null)
-                return Result.Fail<ImageSettings>("Settings can't be found");
-
-            return Result.Of(() =>
+            if (!imageSettings.IsSuccess)
             {
-                var areCorrectSettings = Result.Of(() => AreCorrectSettings(imageSettings));
-                if (!areCorrectSettings.IsSuccess)
-                {
-                    throw new Exception(areCorrectSettings.Error);
-                }
-                
-                var imageHeight = int.Parse(imageSettings["ImageHeight"]);
-                var imageWidth = int.Parse(imageSettings["ImageWidth"]);
-                var backgroundColor = GetColor(imageSettings["BackgroundColor"].Split(' '));
-                var tagColor = GetColor(imageSettings["TagColor"].Split(' '));
-                return new ImageSettings(imageHeight, imageWidth, backgroundColor, tagColor);
-            });
+                return Result.Fail<ImageSettings>("Settings can't be found");
+            }
+
+            var ims = imageSettings.Value;
+            return AreAllFieldsInSettings(ims)
+                .Then(_ => new ImageSettings(
+                        int.Parse(ims["ImageHeight"]),
+                        int.Parse(ims["ImageWidth"]),
+                        GetColor(ims["BackgroundColor"].Split(' ')),
+                        GetColor(ims["TagColor"].Split(' ')))
+                );
         }
 
-        private static bool AreCorrectSettings(IReadOnlyDictionary<string, string> imageSettings)
+        private static Result<bool> AreAllFieldsInSettings(IReadOnlyDictionary<string, string> imageSettings)
         {
-            string[] fieldsToGet = { "ImageHeight", "ImageWidth", "BackgroundColor", "TagColor" };
+            string[] fieldsToGet = {"ImageHeight", "ImageWidth", "BackgroundColor", "TagColor"};
             foreach (var field in fieldsToGet)
             {
                 if (imageSettings.ContainsKey(field))
                     continue;
-                throw new KeyNotFoundException($"{field} was not found in settings");
+                return Result.Fail<bool>($"{field} was not found in settings");
             }
-            return false;
+            return new Result<bool>(); 
         }
 
-        private static Dictionary<string, string> GetImageSettings(string settingsFilename)
+        private static Result<Dictionary<string, string>> GetImageSettings(string settingsFilename)
         {
             var fileReader = new TxtFileReader();
             var fileLines = fileReader
-                .GetFileLines(settingsFilename).Value;
-            return fileLines?.Where(line => line.Contains(':'))
+                .GetFileLines(settingsFilename);
+            return fileLines.Then(
+                lines => lines.Where(line => line.Contains(':'))
                 .Select(x => x.Split(':'))
-                .ToDictionary(pair => pair[0], pair => pair[1]);
+                .ToDictionary(pair => pair[0], pair => pair[1]));
         }
 
         private static Color GetColor(IReadOnlyCollection<string> channels)
