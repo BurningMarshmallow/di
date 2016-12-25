@@ -6,14 +6,12 @@ namespace TagsCloudVisualization.Statistics
 {
     class WordStatistics
     {
-        public static Result<Dictionary<string, int>> GenerateFrequencyStatisticsFromTextLines(string[] textLines, IWordProcessor wordProcessor, IWordSelector wordSelector)
+        public static Dictionary<string, int> GenerateFrequencyStatisticsFromTextLines(string[] textLines, IWordProcessor wordProcessor, IWordSelector wordSelector)
         {
             var frequencyDictionary = new Dictionary<string, int>();
             var words = GetWordsFromLines(textLines)
                 .Where(wordSelector.IsWordAcceptable)
-                .Select(word => wordProcessor == null
-                ? word
-                : wordProcessor.ProcessWord(word));
+                .Select(word => wordProcessor == null ? word : wordProcessor.ProcessWord(word));
 
             foreach (var word in words)
             {
@@ -23,7 +21,7 @@ namespace TagsCloudVisualization.Statistics
                     frequencyDictionary[word] = 1;
             }
 
-            return Result.Ok(frequencyDictionary);
+            return frequencyDictionary;
         }
 
         public static IEnumerable<string> GetWordsFromLines(string[] lines)

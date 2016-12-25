@@ -38,6 +38,10 @@ namespace TagsCloudVisualization
                 Component
                     .For<IWordSelector>()
                     .ImplementedBy<LongWordsSelector>());
+            container.Register(
+                Component
+                    .For<IWordProcessor>()
+                    .ImplementedBy<LowerStemWordProcessor>());
         }
 
 

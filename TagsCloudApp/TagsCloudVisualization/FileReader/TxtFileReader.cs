@@ -6,11 +6,10 @@ namespace TagsCloudVisualization.FileReader
     {
         public Result<string[]> GetFileLines(string filename)
         {
+            if (!File.Exists(filename))
+                return Result.Fail<string[]>("File was not found");
             var fileLines = Result.Of(() => File.ReadAllLines(filename));
-                return fileLines
-                .ReplaceError(m => m.StartsWith("Could not find file")
-                ? "File was not found"
-                : "File can't be read");
+            return fileLines.ReplaceError(m => "File can't be read");
         }
     }
 }

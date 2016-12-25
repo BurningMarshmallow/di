@@ -20,14 +20,13 @@ namespace TagsCloudVisualization.Client
 
             var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
             GetStatisticsFromTextFile(container, settings.TextInputFile)
-                .Then(
-                    statistics =>
-                            LayoutTags(statistics, layouter, settings.NumberOfWords, fontFactory, settings.FontFamily))
+                .Then(statistics => LayoutTags(statistics, layouter, settings.NumberOfWords,
+                    fontFactory, settings.FontFamily))
                 .Then(tags => YamlParser.ParseImageSettings(settings.SettingsFilename)
-                    .OnFail(PrintErrorMessage)
                     .Then(imageSettings => new Visualizer(imageSettings))
                     .Then(visualizer =>
-                            visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp)));
+                            visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp)))
+                .OnFail(PrintErrorMessage);
         }
 
         private Result<Dictionary<string, int>> GetStatisticsFromTextFile(IWindsorContainer container,
@@ -35,13 +34,15 @@ namespace TagsCloudVisualization.Client
         {
             var fileReader = container.Resolve<IFileReader>();
             var wordSelector = container.Resolve<IWordSelector>();
-
-            var textLines = fileReader.GetFileLines(textInputFilename)
-                .OnFail(PrintErrorMessage);
-            var wordProcessor = ResultClassFactory<LowerStemWordProcessor>.Create(
+            var wordProcessor = Result.Of(container.Resolve<IWordProcessor>,
                     "Dictionaries for NHunspell were not found" +
                     ",\nTag cloud will be created without getting word stem")
                 .OnFail(PrintErrorMessage);
+
+            var textLines = fileReader
+                .GetFileLines(textInputFilename);
+            if (!textLines.IsSuccess)
+                return Result.Fail<Dictionary<string, int>>(textLines.Error);
 
             return WordStatistics.GenerateFrequencyStatisticsFromTextLines(
                 textLines.Value, wordProcessor.Value, wordSelector);
