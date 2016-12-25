@@ -17,7 +17,7 @@ namespace TagsCloudVisualization.Layouter
             spiral = new EndlessSpiral(center);
         }
 
-        public Rectangle PutNextRectangle(Size rectangleSize)
+        public Result<Rectangle> PutNextRectangle(Size rectangleSize)
         {
             Rectangle newRectangle;
             if (rectangles.Count == 0)

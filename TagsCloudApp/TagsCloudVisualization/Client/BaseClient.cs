@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using Castle.Windsor;
 using TagsCloudVisualization.FileReader;
 using TagsCloudVisualization.Layouter;
+using TagsCloudVisualization.Spiral;
 using TagsCloudVisualization.Statistics;
 using TagsCloudVisualization.Visualization;
 
@@ -16,16 +16,26 @@ namespace TagsCloudVisualization.Client
         public void Run(IWindsorContainer container, string[] args)
         {
             var settings = GetTagCloudSettings(args);
-            var layouter = container.Resolve<ILayouter>();
 
+            var ims = YamlParser.ParseImageSettings(settings.SettingsFilename);
+            if (!ims.IsSuccess)
+            {
+                PrintErrorMessage(ims.Error);
+                return;
+            }
+                
+            var imageSettings = ims.Value;
+
+            var spiralCenter = new Point(imageSettings.ImageHeight/2, imageSettings.ImageWidth/2);
+            var layouterSpiral = container.Resolve<ISpiral>(new {spiralCenter});
+            var layouter = container.Resolve<ILayouter>(new {center = spiralCenter, spiral = layouterSpiral});
+
+            var visualizer = new Visualizer(imageSettings);
             var fontFactory = new FontFactory(settings.MinFontSize, settings.MaxFontSize, settings.FontFamily);
             GetStatisticsFromTextFile(container, settings.TextInputFile)
                 .Then(statistics => LayoutTags(statistics, layouter, settings.NumberOfWords,
                     fontFactory, settings.FontFamily))
-                .Then(tags => YamlParser.ParseImageSettings(settings.SettingsFilename)
-                    .Then(imageSettings => new Visualizer(imageSettings))
-                    .Then(visualizer =>
-                            visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp)))
+                .Then(tags => visualizer.VisualizeTags(settings.ImageOutputFile, tags, ImageFormat.Bmp))
                 .OnFail(PrintErrorMessage);
         }
 

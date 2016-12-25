@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using Castle.Core;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using TagsCloudVisualization.Client;
@@ -14,7 +14,6 @@ namespace TagsCloudVisualization
         public static void Main(string[] args)
         {
             var container = new WindsorContainer();
-
             container.Register(
                 Component
                     .For<BaseClient>()
@@ -47,19 +46,22 @@ namespace TagsCloudVisualization
 
         private static void RegisterComponentsForLayouter(IWindsorContainer container)
         {
-            var spiralCenter = new Point(400, 400);
+            //var spiralCenter = new Point(400, 400);
             container.Register(
                 Component
                     .For<ISpiral>()
-                    .ImplementedBy<CircleSpiral>().Named("Spiral")
-                    .DependsOn(Dependency.OnValue("spiralCenter", spiralCenter)));
+                    .ImplementedBy<CircleSpiral>()
+                    .LifeStyle.Is(LifestyleType.Transient)
+            );
 
             container.Register(
                 Component
                     .For<ILayouter>()
                     .ImplementedBy<LayouterWithGeneratorSpiral>()
-                    .DependsOn(Dependency.OnValue("center", spiralCenter))
-                    .DependsOn(Dependency.OnComponent("spiral", "Spiral")));
+                    .LifeStyle.Is(LifestyleType.Transient)
+                //.DependsOn(Dependency.OnValue("center", spiralCenter))
+                //.DependsOn(Dependency.OnComponent("spiral", "Spiral")));
+            );
         }
     }
 }
