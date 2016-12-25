@@ -122,7 +122,6 @@
     <Compile Include="Client\ConsoleClient.cs" />
     <Compile Include="Client\FontFactory.cs" />
     <Compile Include="Result.cs" />
-    <Compile Include="LayouterFactory.cs" />
     <Compile Include="Statistics\IWordProcessor.cs" />
     <Compile Include="Statistics\IWordSelector.cs" />
     <Compile Include="Statistics\LongWordsSelector.cs" />
