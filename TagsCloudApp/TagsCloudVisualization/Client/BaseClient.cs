@@ -17,14 +17,14 @@ namespace TagsCloudVisualization.Client
         {
             var settings = GetTagCloudSettings(args);
 
-            var ims = YamlParser.ParseImageSettings(settings.SettingsFilename);
-            if (!ims.IsSuccess)
+            var imageSettingsParsingResult = YamlParser.ParseImageSettings(settings.SettingsFilename);
+            if (!imageSettingsParsingResult.IsSuccess)
             {
-                PrintErrorMessage(ims.Error);
+                PrintErrorMessage(imageSettingsParsingResult.Error);
                 return;
             }
                 
-            var imageSettings = ims.Value;
+            var imageSettings = imageSettingsParsingResult.Value;
 
             var spiralCenter = new Point(imageSettings.ImageHeight/2, imageSettings.ImageWidth/2);
             var layouterSpiral = container.Resolve<ISpiral>(new {spiralCenter});
@@ -62,7 +62,7 @@ namespace TagsCloudVisualization.Client
 
         protected abstract void PrintErrorMessage(string message);
 
-        protected IEnumerable<Tag> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter,
+        private Result<List<Tag>> LayoutTags(Dictionary<string, int> statistics, ILayouter layouter,
             int numberOfWords, FontFactory fontFactory, string fontFamilyName)
         {
             var mostPopularWords = WordStatistics.GetMostPopularWords(statistics, numberOfWords);
@@ -72,14 +72,18 @@ namespace TagsCloudVisualization.Client
             if (maxTagWeight == minTagWeight)
                 minTagWeight -= 1;
             var fontFamily = CreateFontFamilyFromName(fontFamilyName);
-
+            var tags = new List<Tag>();
             foreach (var pair in mostPopularWords)
             {
                 var tag = new Tag(pair.Key,
                     fontFactory.CreateFontFromWeight(pair.Value, minTagWeight, maxTagWeight, fontFamily));
-                tag.Place = layouter.PutNextRectangle(tag.TagSize);
-                yield return tag;
+                var placeToPut = layouter.PutNextRectangle(tag.TagSize);
+                if (!placeToPut.IsSuccess)
+                    return Result.Fail<List<Tag>>(placeToPut.Error);
+                tag.Place = placeToPut.Value;
+                tags.Add(tag);
             }
+            return tags;
         }
 
         private FontFamily CreateFontFamilyFromName(string name)

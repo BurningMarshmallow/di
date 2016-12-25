@@ -27,7 +27,7 @@ namespace TagsCloudVisualization.UnitTests
             var newRect = cloudLayouter.PutNextRectangle(new Size(200, 100));
 
             Assert.AreEqual(new Rectangle(300, 350, 200, 100), newRect);
-            Assert.AreEqual(center, newRect.GetCenterOfRectangle());
+            Assert.AreEqual(center, newRect.Value.GetCenterOfRectangle());
         }
 
         [TestCase(200)]
@@ -54,8 +54,8 @@ namespace TagsCloudVisualization.UnitTests
         {
             var rectangleSize = new Size(width, height);
 
-            var first = cloudLayouter.PutNextRectangle(rectangleSize);
-            var second= cloudLayouter.PutNextRectangle(rectangleSize);
+            var first = cloudLayouter.PutNextRectangle(rectangleSize).Value;
+            var second= cloudLayouter.PutNextRectangle(rectangleSize).Value;
 
             Assert.False(first.IntersectsWith(second));
         }

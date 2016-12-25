@@ -18,7 +18,7 @@ namespace TagsCloudVisualization.Layouter
             Spiral = spiral;
         }
 
-        public Rectangle PutNextRectangle(Size rectangleSize)
+        public Result<Rectangle> PutNextRectangle(Size rectangleSize)
         {
             Rectangle newRectangle;
             if (rectangles.Count == 0)
@@ -30,8 +30,18 @@ namespace TagsCloudVisualization.Layouter
                 var currentPoint = GetNextPoint(rectangleSize);
                 newRectangle = RectangleFactory.CreateFromCenterAndSize(currentPoint, rectangleSize);
             }
+            if (!IsInTagCloud(newRectangle))
+                return Result.Fail<Rectangle>("Tag cloud doesn't fit in image");
             rectangles.Add(newRectangle);
             return newRectangle;
+        }
+
+        private bool IsInTagCloud(Rectangle rectangle)
+        {
+            return rectangle.Bottom > 0 && rectangle.Bottom < 2 * Center.Y
+                   && rectangle.Top > 0 && rectangle.Top < 2 * Center.Y
+                   && rectangle.Left > 0 && rectangle.Left < 2 * Center.X
+                   && rectangle.Right > 0 && rectangle.Right < 2 * Center.X;
         }
 
         private static Point GetRectangleUpperLeftPoint(Rectangle rect)

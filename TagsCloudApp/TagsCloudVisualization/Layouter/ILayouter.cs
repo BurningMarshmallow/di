@@ -4,7 +4,7 @@ namespace TagsCloudVisualization.Layouter
 {
     public interface ILayouter
     {
-        Rectangle PutNextRectangle(Size rectangleSize);
+        Result<Rectangle> PutNextRectangle(Size rectangleSize);
         Rectangle[] Rectangles { get; }
     }
 }
